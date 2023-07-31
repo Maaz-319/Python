@@ -1,0 +1,11 @@
+Keyboard:
+
+Go left -> Left arrow
+Go Right-> Right arrow
+Shoot -> Space Bar
+
+Joystick:
+
+
+Go left & Right-> Left joyaxis
+Shoot -> back right

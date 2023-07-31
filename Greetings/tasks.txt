@@ -1,0 +1,7 @@
+• Sh module
+• Voice Assistant code structure change
+• Database with python
+• Python Keylogger
+• Python Oops
+• Chat Application Interface
+• Download Check list (M Downloader)

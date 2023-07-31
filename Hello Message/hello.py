@@ -1,0 +1,2 @@
+print("\n\tHello")
+input()

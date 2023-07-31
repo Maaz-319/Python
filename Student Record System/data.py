@@ -1,0 +1,4 @@
+names=['MUHAMMMAD FAAIQ', 'MAAZ BIN ASIF']
+f_names=['MUHAMMAD FAIZAN', 'MUHAMMAD ASIF']
+phones=['03004508622', '03121442598']
+roll_ns=[85, 86]
