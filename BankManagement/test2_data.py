@@ -1,3 +1,3 @@
-acc_name = ['test']
-acc_pass = ['1234']
-acc_money = [100]
+acc_name = []
+acc_pass = []
+acc_money = []
