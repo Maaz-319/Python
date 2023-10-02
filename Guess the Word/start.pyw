@@ -9,27 +9,51 @@ fg_color = 'Black'
 guessed_characters = []
 indicating_text = ""
 user_guess = None
-rules_text = "─────────────────────\nRules:\n• Guess the Word Challenge •\n\n• You have to Enter your Guessed letter of the word in the box saying 'Your Guess.'\n• Only one letter is allowed at a time and you lose a turn on the wrong guess.         \n• After entering your guess, click on the 'Go' button or simply press the Enter key.  \n• The number of dashes at the bottom represents the length of the word to guess.   \n\nAre you up for the challenge? Let's play!\n─────────────────────"
-word_list = [
-    "apple", "banana", "chocolate", "umbrella", "elephant",
-    "guitar", "hamburger", "jazz", "kangaroo", "lighthouse",
-    "mountain", "ocean", "piano", "rainbow", "sunflower",
-    "television", "vampire", "watermelon", "xylophone", "zebra",
-    "butterfly", "candle", "dragon", "fireworks", "giraffe",
-    "honeybee", "icecream", "jigsaw", "kite", "lemonade",
-    "magnolia", "nightmare", "octopus", "penguin", "quicksand",
-    "raccoon", "strawberry", "toucan", "unicorn", "volcano",
-    "whale", "xylophone", "yacht", "zucchini", "acrobatic",
-    "boulevard", "carousel", "dandelion", "elevator", "fountain",
-    "gorilla", "hedgehog", "igloo", "jackal", "koala", "llama",
-    "marmalade", "narwhal", "opera", "pancake", "quokka", "rhinoceros",
-    "sunrise", "tornado", "umbrella", "vibrant", "waterfall", "xylophone",
-    "yogurt", "zeppelin", "avocado", "blueberry", "caterpillar", "dolphin",
-    "elephant", "flamingo", "gazelle", "hibiscus", "iguana", "jellyfish",
-    "kangaroo", "lemur", "macaw", "nightingale", "ostrich", "panda",
-    "quail", "rhinoceros", "seagull", "tiger", "unicorn", "vulture",
-    "walrus", "x-ray", "yak", "zebra"
-]
+category = None
+rules_text = "─────────────────────\nRules:\n• Guess the Word Challenge •\n\n• You have to Enter your Guessed letter of the word in the box saying 'Your Guess.'\n• Only one letter is allowed at a time and you lose a turn on the wrong guess.         \n• After entering your guess, click on the 'Go' button or simply press the Enter key.  \n• The number of dashes at the bottom represents the length of the word to guess.   \n─────────────────────"
+word_list = {
+    'Vehicle': ['car', 'bus', 'bike', 'truck', 'train', 'motorcycle', 'scooter', 'helicopter', 'airplane', 'boat',
+                'submarine', 'hovercraft', 'ambulance', 'bicycle', 'tractor', 'cruise', 'jeep', 'sailboat',
+                'skateboard', 'yacht', 'firetruck', 'van', 'tank',
+                'unicycle', 'spaceship', 'rickshaw', 'gondola', 'skis', 'rollerblades', 'jetski', 'forklift', 'sled',
+                'golfcart', 'parachute', 'hangglider', 'bulldozer', 'snowmobile', 'rickshaw', 'zebra', 'tram', 'pogo',
+                'trolley'],
+
+    'Fruit': ['apple', 'banana', 'orange', 'strawberry', 'grape', 'watermelon', 'kiwi', 'pineapple', 'blueberry',
+              'cherry', 'mango', 'papaya', 'pear', 'apricot', 'lemon', 'lime', 'peach', 'raspberry', 'coconut', 'guava',
+              'date', 'blackberry', 'avocado', 'cantaloupe', 'currant', 'elderberry',
+              'gooseberry', 'lychee', 'pomegranate', 'dragonfruit'],
+
+    'Vegetable': ['carrot', 'broccoli', 'potato', 'tomato', 'cucumber', 'lettuce', 'zucchini', 'onion', 'pepper',
+                  'mushroom', 'spinach', 'celery', 'asparagus', 'cauliflower', 'cabbage', 'eggplant', 'radish', 'okra',
+                  'turnip', 'kale', 'artichoke', 'pea', 'squash', 'bean', 'sweetpotato', 'leek', 'brusselsprout',
+                  'beet', 'corn', 'parsnip', 'garlic', 'rhubarb', 'pumpkin'],
+
+    'Furniture': ['chair', 'table', 'sofa', 'bed', 'bookshelf', 'wardrobe', 'desk', 'cabinet', 'ottoman', 'diningtable',
+                  'couch', 'stool', 'bench', 'couch', 'sectional', 'armchair', 'ottoman', 'sideboard', 'settee',
+                  'hammock', 'tuffet', 'wardrobe', 'stool'],
+
+    'Verb': ['run', 'jump', 'sing', 'dance', 'swim', 'read', 'write', 'talk', 'laugh', 'cry', 'eat', 'drink', 'sleep',
+             'dream', 'think', 'climb', 'work', 'play', 'study', 'teach', 'drive', 'fly', 'ride', 'cook', 'bake',
+             'draw', 'paint', 'ski', 'hike', 'skate', 'travel', 'build', 'clean', 'wash', 'listen', 'speak', 'shout',
+             'whisper', 'buy', 'sell', 'meet', 'greet', 'help', 'smile', 'frown', 'apologize', 'forgive'],
+
+    'Adjective': ['happy', 'sad', 'angry', 'excited', 'bored', 'tired', 'hungry', 'thirsty', 'scared', 'brave', 'shy',
+                  'curious', 'proud', 'ashamed', 'surprised', 'confused', 'crazy', 'calm', 'energetic', 'lazy',
+                  'friendly', 'lonely', 'lovely', 'ugly', 'handsome', 'beautiful', 'plain', 'smart', 'dumb', 'kind',
+                  'mean', 'funny', 'serious', 'silly', 'quiet', 'loud', 'gentle', 'rough', 'soft', 'hard', 'smooth',
+                  'sticky'],
+
+    'Technology': ['computer', 'smartphone', 'tablet', 'laptop', 'keyboard', 'mouse', 'monitor', 'printer', 'router',
+                   'modem', 'headphones', 'microphone', 'speaker', 'camera', 'console', 'smartwatch', 'drones',
+                   'projector', 'harddrive', 'bluetooth', 'wearable', 'scanner',
+                   'headset', 'flashdrive', 'chromecast', 'drone', 'hoverboard', 'robot', 'satellite',
+                   'simcard', 'biometric', 'printer', 'joystick', 'motherboard',
+                   'ethernet', 'touchscreen', 'videocard', 'webcam', 'microcontroller', 'teleportation'],
+    'Animal': ['lion', 'tiger', 'elephant', 'giraffe', 'zebra', 'kangaroo', 'hippopotamus', 'cheetah', 'leopard',
+               'panda', 'koala', 'wolf', 'fox', 'bear', 'gorilla', 'monkey', 'seal', 'jaguar'],
+    'Bird': ['eagle', 'hawk', 'sparrow', 'robin', 'parrot', 'penguin', 'peacock', 'ostrich', 'flamingo', 'swan']
+}
 
 
 def entry_focused(_):
@@ -61,7 +85,8 @@ def check_guess(_):
         turns_label['text'] = "Turns Left: " + str(turns_count)
         if turns_count == 0:
             turns_label['text'] = "Turns Left: " + str(turns_count)
-            choice = messagebox.askyesno("Guess the Word", str("You have lost!\nThe Word was " + secret_word + ". Better luck next time\nPlay Again?"))
+            choice = messagebox.askyesno("Guess the Word",
+                                         str("You have lost!\nThe Word was " + secret_word + ". Better luck next time\nPlay Again?"))
             if choice:
                 choose_secret_word()
             else:
@@ -76,8 +101,10 @@ def check_guess(_):
 
 
 def choose_secret_word():
-    global secret_word, indicating_text, indicating_label, turns_count
-    secret_word = choice(word_list)
+    global secret_word, indicating_text, indicating_label, turns_count, category
+    category = choice(list(word_list.keys()))
+    secret_word = choice(word_list[category])
+    category_label['text'] = category
     turns_count = 8
     turns_label['text'] = 'Turns Left: ' + str(turns_count)
     input_box.delete(0, END)
@@ -99,9 +126,10 @@ root.bind("<Return>", check_guess)
 
 # Defining Objects
 indicating_label = Label(root, bg=bg_color, fg='Purple', font=("Times", 40))
+Label(root, text="Category → ", bg=bg_color, fg='#3c3f41', font=("Times", 18)).place(x=120, y=270)
+category_label = Label(root, bg=bg_color, fg='#3c3f41', font=("Times", 18, 'underline'))
 rules_label = Label(root, text=rules_text, bg=bg_color, fg='#0000d0', font=("Ariel", 10))
-Label(root, font=("Constancia", 25), text='Your Guess →  ', bg=bg_color, fg='Blue').place(x=50,
-                                                                                          y=100)
+Label(root, font=("Constancia", 25), text='Your Guess →  ', bg=bg_color, fg='Blue').place(x=50, y=100)
 input_box = Entry(root, font=('Ariel', 25), bg=bg_color, fg=fg_color, width=2, border=0.5)
 turns_label = Label(root, bg=bg_color, fg='Red', font=("Constancia", 20))
 turns_label.place(x=20, y=20)
@@ -113,8 +141,9 @@ go_button = Button(root, text="GO", font=("Constancia", 15), bg='#3c3f41', fg=bg
 choose_secret_word()
 
 # Placing Objects
-indicating_label.place(x=160, y=screen_height - 340)
-rules_label.place(x=10, y=200)
+indicating_label.place(x=170, y=180)
+category_label.place(x=250, y=270)
+rules_label.place(x=10, y=350)
 go_button.place(x=380, y=100)
 go_button.configure(relief='ridge')
 
