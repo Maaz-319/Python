@@ -6,10 +6,8 @@ from tkinter.messagebox import showerror, showinfo
 
 password_lengths = ['4', '8', '16', '32', '128']
 number_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-letter_list = [
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
-    'x', 'y', 'z']
-symbols_list = ['!', '@', '#', '$', '%', '^', '&', '*', '(', '(', '_', '-', '=', '+']
+letter_list = list('abcdefghijklmnopqrstuvwxyz')
+symbols_list = list('!@#$%^&*()_+=-}|;:<>.,/?')
 include_symbols = False
 include_numbers = False
 include_letters = False
@@ -49,20 +47,25 @@ root.title('Password Generator')
 def start():
     decoration_controller(0)
     global include_symbols, include_letters, include_numbers, do_not_generate_password
-    if len(password_field.get()) != int(length.get()) and include_letters:
-        passw = random.choice(letter_list)
-        password_field.insert(0, passw)
-    if len(password_field.get()) != int(length.get()) and include_numbers:
-        passw = random.choice(number_list)
-        password_field.insert(0, passw)
-    if len(password_field.get()) != int(length.get()) and include_symbols:
-        passw = random.choice(symbols_list)
-        password_field.insert(0, passw)
 
-    if len(password_field.get()) == int(length.get()) or do_not_generate_password:
-        pass
-    else:
-        start()
+    while True:
+        if include_letters:
+            passw = random.choice(letter_list)
+            password_field.insert(0, passw)
+        if len(password_field.get()) == int(length.get()):
+            break;
+
+        if include_numbers:
+            passw = random.choice(number_list)
+            password_field.insert(0, passw)
+        if len(password_field.get()) == int(length.get()):
+            break;
+
+        if include_symbols:
+            passw = random.choice(symbols_list)
+            password_field.insert(0, passw)
+        if len(password_field.get()) == int(length.get()):
+            break;
 
 
 def copy():
@@ -103,7 +106,7 @@ start_button.place(x=300, y=400)
 Label(text='Select Password Length', font=('Helvetica', 15), bg=bg_black_color, fg='White', borderwidth=0.5).place(
     x=900, y=350)
 length = StringVar()
-length.set(password_lengths[0])
+length.set(password_lengths[2])
 password_length_menu = OptionMenu(root, length, *password_lengths)
 password_length_menu.place(x=970, y=400)
 
