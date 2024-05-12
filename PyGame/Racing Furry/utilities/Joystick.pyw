@@ -8,11 +8,15 @@ loop = True  # to manage the game loop
 game_over = False  # Flag to track the game state
 fps = 70
 
+with open("data.txt", "r") as file:
+    data = int(file.read())
+    file.close()
+
 # Loading Images
-car_img = pygame.image.load("utilities/images/car.png")
-barrier_img = pygame.image.load("utilities/images/barrier.png")
-background_image = pygame.image.load("utilities/images/bg.png")
-icon = pygame.image.load("utilities/images/icon.png")
+car_img = pygame.image.load("images/car.png")
+barrier_img = pygame.image.load("images/barrier.png")
+background_image = pygame.image.load("images/bg.png")
+icon = pygame.image.load("images/icon.png")
 
 # Defining attributes
 
@@ -20,7 +24,7 @@ icon = pygame.image.load("utilities/images/icon.png")
 barrier_x_pos = [400, 500, 600, 700, 800, 860]
 barrier_x = random.choice(barrier_x_pos)
 barrier_y = 10
-barrier_y_change = 30
+barrier_y_change = data
 # lane
 lane_marks_list = []
 lane_marks_x = []
@@ -32,23 +36,23 @@ car_x = 682
 car_y = 600
 car_x_change = 0
 for i in range(no_of_lane_marks):
-    lane_marks_list.append(pygame.image.load("utilities/images/lanemarks.png"))
+    lane_marks_list.append(pygame.image.load("images/lanemarks.png"))
     lane_marks_x.append(843)
     lane_marks_x.append(530)
     lane_marks_y.append(100)
-    lane_marks_y_change.append(60)
+    lane_marks_y_change.append(90)
 
 # initialize window
 pygame.init()
-font = pygame.font.Font("utilities/font/the_font_namco.ttf", 20)
+font = pygame.font.Font("font/the_font_namco.ttf", 20)
 screen = pygame.display.set_mode((1366, 768))
 background_image = pygame.transform.scale(background_image, (1366, 768))
 pygame.display.set_caption("Racing Fury | By Maaz")
 pygame.display.set_icon(icon)
 
 # background music
-musics = ["utilities/sounds/bg1.mp3", "utilities/sounds/bg2.mp3", "utilities/sounds/bg3.mp3",
-          "utilities/sounds/bg4.mp3"]
+musics = ["sounds/bg1.mp3", "sounds/bg2.mp3", "sounds/bg3.mp3",
+          "sounds/bg4.mp3"]
 music_file = random.choice(musics)
 pygame.mixer.music.load(music_file)
 pygame.mixer.music.play(-1)
@@ -90,7 +94,7 @@ def show_points():
 
 
 def play_again():
-    global music_file, musics
+    global music_file, musics, data
     music_file = random.choice(musics)
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play(-1)
@@ -100,7 +104,7 @@ def play_again():
     points_counter = 0
     barrier_x = random.choice(barrier_x_pos)
     barrier_y = 10
-    barrier_y_change = 30
+    barrier_y_change = data
 
 
 clock = pygame.time.Clock()
@@ -168,7 +172,7 @@ while loop:
         if coll_check:
             game_over = True
             pygame.mixer.music.stop()
-            pygame.mixer.Sound("utilities/sounds/explosion.wav").play()
+            pygame.mixer.Sound("sounds/explosion.wav").play()
             car_x_change = 0
             barrier_y_change = 0
 
