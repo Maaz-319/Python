@@ -1,19 +1,16 @@
 import pygame
 import random
 import math
+import settings as st
 
 # Variables
+fps = st.values[0]
 points_counter = 0  # keep track of points
 loop = True  # to manage the game loop
 game_over = False  # Flag to track the game state
-fps = 70
-
-with open("data.txt", "r") as file:
-    data = int(file.read())
-    file.close()
 
 # Loading Images
-car_img = pygame.image.load("images/car.png")
+car_img = pygame.image.load(st.values[3])
 barrier_img = pygame.image.load("images/barrier.png")
 background_image = pygame.image.load("images/bg.png")
 icon = pygame.image.load("images/icon.png")
@@ -24,7 +21,7 @@ icon = pygame.image.load("images/icon.png")
 barrier_x_pos = [400, 500, 600, 700, 800, 860]
 barrier_x = random.choice(barrier_x_pos)
 barrier_y = 10
-barrier_y_change = data
+barrier_y_change = st.values[1]
 # lane
 lane_marks_list = []
 lane_marks_x = []
@@ -40,7 +37,7 @@ for i in range(no_of_lane_marks):
     lane_marks_x.append(843)
     lane_marks_x.append(530)
     lane_marks_y.append(100)
-    lane_marks_y_change.append(90)
+    lane_marks_y_change.append(st.values[2])
 
 # initialize window
 pygame.init()
@@ -94,7 +91,7 @@ def show_points():
 
 
 def play_again():
-    global music_file, musics, data
+    global music_file, musics
     music_file = random.choice(musics)
     pygame.mixer.music.load(music_file)
     pygame.mixer.music.play(-1)
@@ -104,7 +101,7 @@ def play_again():
     points_counter = 0
     barrier_x = random.choice(barrier_x_pos)
     barrier_y = 10
-    barrier_y_change = data
+    barrier_y_change = st.values[1]
 
 
 clock = pygame.time.Clock()
