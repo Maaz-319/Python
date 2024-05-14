@@ -8,6 +8,15 @@ fps = st.values[0]
 points_counter = 0  # keep track of points
 loop = True  # to manage the game loop
 game_over = False  # Flag to track the game state
+if st.values[1] == 30:
+    current_mode_selected = "easy"
+    mode_color = (0, 255, 0)
+elif st.values[1] == 40:
+    current_mode_selected = "medium"
+    mode_color = (255, 255, 0)
+elif st.values[1] == 60:
+    current_mode_selected = "hard"
+    mode_color = (255, 0, 0)
 
 # Loading Images
 car_img = pygame.image.load(st.values[3])
@@ -88,6 +97,14 @@ def collision(x1, x2, y1, y2):
 def show_points():
     points_label = font.render(str(int(points_counter)), True, (0, 255, 0))
     screen.blit(points_label, (10, 10))
+    highest_score_label = font.render("highest score", True, (255, 255, 255))
+    screen.blit(highest_score_label, (1050, 10))
+    highest_score = font.render(str(int(st.values[4])), True, (0, 255, 0))
+    screen.blit(highest_score, (1150, 50))
+    current_mode_label = font.render("current mode", True, (255, 255, 255))
+    screen.blit(current_mode_label, (1050, 250))
+    current_mode = font.render(current_mode_selected, True, mode_color)
+    screen.blit(current_mode, (1150, 290))
 
 
 def play_again():
@@ -102,6 +119,13 @@ def play_again():
     barrier_x = random.choice(barrier_x_pos)
     barrier_y = 10
     barrier_y_change = st.values[1]
+
+
+def right_highest_score_to_file():
+    st.values[4] = points_counter
+    with open("settings.py", "w") as f:
+        f.write("values = " + str(st.values) + "\n# setting fps, mode, lane_speed, car, highest_score\n")
+        f.close()
 
 
 clock = pygame.time.Clock()
@@ -131,7 +155,7 @@ while loop:
         if joystick_count > 0:
             if event.type == pygame.JOYAXISMOTION:
                 if event.axis == 0:  # X-axis
-                    car_x_change = event.value * 9
+                    car_x_change = event.value * 25
             if event.type == pygame.JOYBUTTONDOWN and game_over:
                 if event.button == 5:  # R1 button index may vary, adjust accordingly
                     play_again()
@@ -145,6 +169,8 @@ while loop:
         if points_counter % 50 == 0:
             barrier_y_change += 1
             car_y -= 0.5
+        if points_counter > st.values[4]:
+            st.values[4] = points_counter
 
         for n in range(no_of_lane_marks):
             lane_marks_y[n] += lane_marks_y_change[n]
@@ -172,6 +198,8 @@ while loop:
             pygame.mixer.Sound("sounds/explosion.wav").play()
             car_x_change = 0
             barrier_y_change = 0
+            if points_counter >= st.values[4]:
+                right_highest_score_to_file()
 
     draw_barrier(barrier_x, barrier_y)
     draw_car(car_x, car_y)

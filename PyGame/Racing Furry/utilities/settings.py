@@ -1,2 +1,2 @@
-values = [60, 30, 50, 'images/cars/7.png']
+values = [60, 60, 90, 'images/cars/1.png', 188.0]
 # setting fps, mode, lane_speed, car
