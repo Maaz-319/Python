@@ -25,7 +25,7 @@ def print_text_slowly(text, delay=0.01):
 
 os.system('cls')
 print_text_slowly("\n\t\t\tWelcom to Bank Management System.\n")
-print_text_slowly("********************************************************************************")
+print_text_slowly("*"*80)
 input("\n\t\t\tPress Enter to Start...")
 acc_found = False
 

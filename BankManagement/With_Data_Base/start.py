@@ -1,185 +1,311 @@
-import getpass, os
+# ============ Bank Management System ================
+
+# ================== Imports ==========================
+import os
 import database_handler as db
-current_login = ""
+
+# Global Variable to store account object
+new_account = None
+new_account_holder = None
 
 
+# ================== Classes  =================================================================================
+class account_holder:
+    def __init__(self, holder_name, phone, email, address="Unknown"):
+        self.holder_name = holder_name
+        self.phone = phone
+        self.email = email
+        self.address = address
 
-os.system('cls')
-print("\n\t\t\tWelcom to Bank Management System.\n")
-print("********************************************************************************")
-name_found = False
-password_found = False
+    # -----------------------------------------------------------------
 
-
-def ask_pass():
-    secret_key = "Maaz"
-    password = getpass.getpass(prompt='Password: ', stream=None)
-    if password != secret_key:
-        print("\n\tWrong password!!!!")
-        input("\n\tPress Enter...")
-        exit()
-
-
-def start():
-    os.system('cls')
-    initial_event = int(input("\n\tChoose:\n\t\t1) Login\n\t\t2) Sign up\n\t\t3) See all account holders\n\t\t4) Exit\n\tchoice: "))
-    if initial_event == 1:
-        login()
-    elif initial_event == 2:
-        crt_acc()
-    elif initial_event == 3:
-        all_acc_hold_list()
-    elif initial_event == 4:
-        exit()
-    else:
-        start()
-
-def crt_acc():
-    try:
-        all_accounts = db.show_all()[0]
-    except IndexError:
-        all_accounts = ""
-    name = str(input("\nEnter account name: "))
-    if name in all_accounts:
-        print("\n\n\tName already Used\n\tChoose Something else.")
-        crt_acc()
-    money = int(input("Enter initial amount of money: "))
-    pin = getpass.getpass(prompt='Enter pin for your account(4-digit): ', stream=None)
-    length = len(pin)
-    while length != 4:
-        pin = getpass.getpass(prompt='Please enter atleast 4digit pin: ', stream=None)
-        length = len(pin)
-    db.add_record(name, pin, money)
-    print("\n\tNew Account Info:\n")
-    print("\n\t\tYour account name is : ", db.show_one(name)[0][0])
-    print("\n\t\tYou have " ,db.show_one(name)[0][2],"Rs in your account.")
-    input("\n\tPress Enter...")
-    start()
-
-def login():
-    global name_found, current_login
-    name = str(input("\nEnter account name: "))
-    fetch_data = db.show_one(name)
-    if fetch_data:
-        pin = getpass.getpass("Enter account pin: ")
-        if fetch_data[0][1] == pin:
-            current_login = name
-            logged_in(name, fetch_data)
-        else:
-            print("wrong Password!")
-            input("\n\tPress Enter...")
-            login()
-    else:
-        input("\n\tAccount Not Found!!\n\n\tPress Enter...")
-        start()
-
-
-def del_acc():
-    name = str(input("\nEnter account name to DELETE: "))
-    fetch_data = db.show_one(name)
-    if not fetch_data:
-        print("No account found!")
-        del_acc()
-    else:
-        pin = getpass.getpass("Enter account pin: ")
-        if pin == fetch_data[0][1]:
-            temp = input("Type CONFIRM in caps: ")
-            if temp == "CONFIRM":
-                db.delete_record(name)
-                print("\nAccount was deleted!")
-                input()
-            else:
-                del_acc()
-        else:
-            print("Wrong password!")
-            del_acc()
-    start()
-
-
-
-def withd_money(name, fetch_data):
-    pin = getpass.getpass("Enter account pin: ")
-    if pin == fetch_data[0][1]:
-        money = int(input("Enter amount of money you want to withdraw: "))
-    elif pin != fetch_data[0][1]:
-        print("wrong Password!")
-        input("\n\tPress Enter...")
-        withd_money(name, fetch_data)
-    if money < 0:
-        print("\nIncorrect amount!")
-        input("\n\tPress Enter...")
-        withd_money(name, fetch_data)
-    if money < fetch_data[0][2]:
-        money = fetch_data[0][2] - money
-        db.update_record(name, money)
-        fetch_data = db.show_one(name)
-        print("\n\tThere are ", db.show_one(name)[0][2], "Rs left in your account.")
-        input("\n\tPress Enter...")
-    else:
-        print("\n\tNot enough money in account :(!")
-        input("\n\tPress Enter...")
-        withd_money(name, fetch_data)
-    logged_in(name, fetch_data)
-        
-def deposit_money(name, fetch_data):
-    pin = getpass.getpass("Enter your account pin: ")
-    if pin == fetch_data[0][1]:
-        money = int(input("Enter amount of money you want to deposit: "))
-        if money < 0:
-            print("\nIncorrect amount!")
-            input("\n\tPress Enter...")
-            deposit_money(name, fetch_data)
-        else:
-            money = fetch_data[0][2] + money           
-            db.update_record(name, money)
-            fetch_data = db.show_one(name)
-            print("\n\tThere are ", fetch_data[0][2], "Rs in your account.")
-            input("\n\tPress Enter...")
-    else:
-        print("Wrong account pin!")
-        input("\n\tPress Enter...")
+    # This function displays account holder information
+    def request_info(self):
         os.system('cls')
-        deposit_money()
-    logged_in(name, fetch_data)
+
+        print(" Account Holder Information ".center(50, '='))
+        print(f"\nName: '{self.holder_name}'")
+        print(f"Phone: '{self.phone}'")
+        print(f"Email: '{self.email}'")
+        print(f"Address: '{self.address}'")
+        print(f"Account Type: {new_account.acc_type}")
+        print(f"Balance: {new_account.balance}")
+
+        input()
 
 
-def all_acc_hold_list():
-    name_list = db.show_all()
-    if name_list:
-        print("\n\tAll Account Holders Names:")
-        for i in name_list:
-            print("\t\t-" + i[0])
-    else:
-        print("\n\tNo Accounts Registered")
-    input("\nPress Enter...")
-    start()
+# ----------------------------------------------------------------------------------------------
+
+class account:
+    def __init__(self, cust_name, acc_type, balance, password):
+        self.cust_name = cust_name
+        self.acc_type = acc_type
+        self.balance = balance
+        self.password = password
+
+    # -----------------------------------------------------------------
+
+    # This Function deposits money into account
+    def deposit_money(self):
+        amount = 0
+        os.system('cls')
+
+        print(" Deposit Money ".center(50, '='))
+
+        # ===================Check if amount entered is integer===================
+        try:
+            amount = int(input("Enter Amount: "))
+        except ValueError:
+            self.deposit_money()
+        # ========================================================================
+
+        # ============amount is only deposited if amount is greater than 0==============
+        if amount > 0:
+            self.balance += amount
+            db.update_record(self.cust_name, self.balance)
+            self.logged_in()
+        else:
+            self.deposit_money()
+        # ================================================================================
+
+    # -----------------------------------------------------------------
+
+    # This Function Withdraws money into account
+    def withdraw_money(self):
+        amount = 0
+        os.system('cls')
+
+        print(" Withdraw Money ".center(50, '='))
+
+        # =================Check if amount entered is integer===================
+        try:
+            amount = int(input("Enter Amount: "))
+        except ValueError:
+            self.withdraw_money()
+        # ========================================================================
+
+        # =========amount is only withdrawn if there is enough money in account===========
+        if self.balance >= amount > 0:
+            self.balance -= amount
+            db.update_record(self.cust_name, self.balance)
+            self.logged_in()
+        else:
+            input(f"\nInsufficient Balance\n\tBalance = {self.balance}\n")
+            self.withdraw_money()
+        # ================================================================================
+
+    # ----------------------------------------------------------------------------------------------
+
+    # This Functions login the user into account if user exists
+    def login(self, name, password):
+        if name == self.cust_name and password == self.password:  # Check if user exists and if Password is correct
+            self.logged_in()
+            return True
+        else:
+            return False
+
+    # ----------------------------------------------------------------------------------------------\
+
+    # This Function runs when user successfully login
+    def logged_in(self):
+        user_choice = 0
+        os.system('cls')
+
+        print(f"Logged in to '{self.cust_name}'")
+        print(f"Type: '{self.acc_type}'")
+        print(f"Balance: '{self.balance}'")
+        print("\n\n\t1. Deposit\n\t2. Withdraw\n\t3. Logout\n\t4. Request Account Info")
+
+        # ===================Check if amount entered is integer===================
+        try:
+            user_choice = int(input("\n\tChoice: "))
+        except ValueError:
+            self.logged_in()
+        # ========================================================================
+
+        # ============User Choice to Deposit, Withdraw, Logout or Request Account Info==============
+        if user_choice == 1:
+            self.deposit_money()
+            self.logged_in()
+        elif user_choice == 2:
+            self.withdraw_money()
+            self.logged_in()
+        elif user_choice == 3:
+            initialize_program()
+        elif user_choice == 4:
+            new_account_holder.request_info()
+            self.logged_in()
+        else:
+            self.logged_in()
+        # ================================================================================
 
 
-def logged_in(name, fetch_data):
+# =========================================================================================================
+#                                             Functions
+# =========================================================================================================
+
+
+# This function gets confidential to log in to account
+def start_login():
+    global new_account, new_account_holder
+
+    name = None
+    password = None
+
     os.system('cls')
-    print("\n\tLogged IN")
-    print("\n\tAccount Name: " + name)
-    print("\tBalance: Rs. ", db.show_one(name)[0][2])
 
+    print(" Login ".center(50, '='))
+
+    # ==========Getting all the required information to login================
     try:
-        user_choice = int(input("\n\tChoose option:\n\t\t1) Withdraw\n\t\t2) Deposit\n\t\t3) Delete account\n\t\t4) Logout\n\t\t5) Exit\n\n\tchoice: "))
+        name = input("\nEnter Your Name: ").lower()
     except ValueError:
-        print("Enter Correct Input :(")
-        user_choice = int(input("\n\tChoose option:\n\t\t1) Withdraw\n\t\t2) Deposit\n\t\t3) Delete account\n\t\t4) Logout\n\t\t5) Exit\n\n\tchoice: "))
+        start_login()
 
+    # ===================Get account and account holder from database===================
+    results_account = db.show_one(name, "Account", "acc_name")  # Get account from database
+    results_holder = db.show_one(name, "Holder", "name")  # Get account holder from database
+    # ==================================================================================
+
+    # ===============Check if account exists in database==============
+    if not results_account or not results_holder:
+        print("\n\tAccount Not Found!")
+        input()
+        initialize_program()
+    else:
+        results_account = results_account[0]  # returned data is in list of list, so we get the first list
+        results_holder = results_holder[0]  # returned data is in list of list, so we get the first list
+
+        # Validating Password
+        try:
+            password = input("Enter Password: ")
+        except ValueError:
+            start_login()
+        # ===================
+
+        # ==============================Authorize Login==============================================
+        if results_account[0] == name and results_account[3] == password:
+            new_account = account(results_account[0], results_account[1], results_account[2],
+                                  results_account[3])  # Create account object
+            new_account_holder = account_holder(results_holder[0], results_holder[1], results_holder[2],
+                                                results_holder[3])  # Create account_holder object
+        else:
+            input("Wrong Password")
+            start_login()
+        if not new_account.login(name, password):
+            print("Login failed")
+            start_login()
+        # ==========================================================================================
+
+
+# ---------------------------------------------------------------------------------------------------------------------
+
+# This function creates new account
+def create_new_account(a):
+    global new_account, new_account_holder
+
+    name = None
+    password = None
+    account_type = None
+    balance = None
+    phone = None
+    email = None
+    address = None
+
+    os.system('cls')
+
+    # Check if wrong value is entered
+    if a:
+        print("\nWrong Value Entered, Retry")
+
+    print(" Account Creation ".center(50, '='))
+
+    # ================Getting all the required information to create account================
+    try:
+        name = input("\nEnter Your Name: ").lower()
+
+        results = db.show_one(name, "Account", "acc_name")  # Get account from database
+
+        if results:  # Check if account already exists
+            for x in results[0]:
+                if name == x[0]:
+                    print("\n\tAccount Already Exists!")
+                    input()
+                    initialize_program()
+
+        # ...................................................................
+        phone = str(input("Enter Phone Number(03xx-xxxxxxx): ")).lower()
+        if len(phone) != 11:
+            raise ValueError
+        # ...................................................................
+
+        # ...................................................................
+        email = input("Enter Email: ").lower()
+        if not "@" and "." in email:
+            raise ValueError
+        # ...................................................................
+
+        address = input("Enter Address: ").lower()
+        password = input("Enter Password: ").lower()
+        account_type = input("Enter account type or leave empty: ").lower()
+        balance = int(input("Enter account initial balance: "))
+        # ==================================================================================
+    except ValueError:
+        create_new_account(True)
+
+    new_account = account(name, account_type if account_type else "Savings", balance, password)  # Create account object
+
+    # Create new account_holder Object
+    if address:  # address is only passed if user entered it
+        new_account_holder = account_holder(name, phone, email, address)
+    else:
+        new_account_holder = account_holder(name, phone, email)
+
+    # Save account to database
+    db.add_record_account(new_account.cust_name, new_account.acc_type, new_account.balance, new_account.password)
+    db.add_record_holder(new_account_holder.holder_name, new_account_holder.phone, new_account_holder.email,
+                         new_account_holder.address)
+
+    input("\nAccount created Successfully")
+    initialize_program()
+
+
+# ----------------------------------------------------------------------------------------------
+
+# This function asks user to create account or Login
+def initialize_program():
+    user_choice = 0
+    os.system('cls')  # clear screen
+
+    print(" Bank Management System ".center(80, '='))
+    print("\n\n\t1. Login\n\t2. Create Account\n\t3. Exit")
+
+    # ===================Check if amount entered is integer===================
+    try:
+        user_choice = int(input("\n\tChoice: "))
+    except ValueError:
+        initialize_program()
+    # ========================================================================
+
+    # ============User Choice to Create Account, Login or Exit==============
     if user_choice == 1:
-        withd_money(name, fetch_data)
+        start_login()
     elif user_choice == 2:
-        deposit_money(name, fetch_data)
+        create_new_account(False)
     elif user_choice == 3:
-        del_acc()
-    elif user_choice == 4:
-        start()
-    elif user_choice == 5:
         exit()
     else:
-        print("Wrong Input!!")
-        logged_in(name, fetch_data)
+        initialize_program()  # If any other choice other than 1,2,3 is entered, function restarts
+    # ================================================================================
 
-ask_pass()
-start()
+
+# =========================================================================================================
+#                                            Code by: Maaz Bin Asif
+#                                               Date: 17/05/2024
+#                                            Email: maazbinaasif@gmail.com
+#                                            Github: github.com/maaz-319
+# =========================================================================================================
+
+if __name__ == '__main__':
+    initialize_program()
+# =========================================================================================================
