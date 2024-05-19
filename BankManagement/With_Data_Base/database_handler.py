@@ -1,141 +1,108 @@
 import sqlite3
 
+results = None
+connection = sqlite3.connect("data.db", isolation_level=None)
 
-def create_table_account():
-    connection = sqlite3.connect("data.db")
+
+def create_tables():
+    global results, connection
+
     cur = connection.cursor()
 
-    cur.execute("CREATE TABLE Account(acc_name text, acc_type text, acc_money integer, acc_pass text)")
+    cur.execute("""
+    CREATE TABLE Account(
+        name TEXT,
+        acc_type TEXT, 
+        acc_money INTEGER,
+        acc_pass TEXT,
+        FOREIGN KEY(name) REFERENCES Holder(name)
+    )
+    """)
+    cur.execute("CREATE TABLE Holder(name text PRIMARY KEY, phone text, email text, address text)")
 
     connection.commit()
-    connection.close()
 
 
-def create_table_holder():
-    connection = sqlite3.connect("data.db")
-    cur = connection.cursor()
+def add_record(objects):
+    global connection
 
-    cur.execute("CREATE TABLE Holder(name text, phone text, email text, address text)")
-
-    connection.commit()
-    connection.close()
-
-
-def add_record_account(name, acc_type, balance, password):
-    connection = sqlite3.connect("data.db")
-    cur = connection.cursor()
-
-    try:
-        cur.execute("INSERT INTO Account VALUES(?,?,?,?)", (name, acc_type, balance, password))
-    except:
-        create_table_account()
-        create_table_holder()
-        add_record_account(name, acc_type, balance, password)
-
-    connection.commit()
-    connection.close()
-
-
-def add_record_holder(name, phone, email, address):
-    connection = sqlite3.connect("data.db")
+    connection.execute("PRAGMA foreign_keys = 1")
     cur = connection.cursor()
 
     try:
-        cur.execute("INSERT INTO Holder VALUES(?,?,?,?)", (name, phone, email, address))
-    except:
-        create_table_account()
-        create_table_holder()
-        add_record_holder(name, phone, email, address)
+        cur.execute("INSERT INTO Holder VALUES(?,?,?,?)",
+                    (objects.holder_name, objects.phone, objects.email, objects.address))
+        cur.execute("INSERT INTO Account VALUES(?,?,?,?)",
+                    (objects.holder_name, objects.account_object.acc_type, objects.account_object.balance,
+                     objects.account_object.password))
 
-    connection.commit()
-    connection.close()
+        connection.commit()
+    except sqlite3.OperationalError:
+        connection.rollback()
+        create_tables()
 
 
 def show_all():
-    connection = sqlite3.connect("data.db")
+    global connection
+
     cur = connection.cursor()
 
     try:
         return cur.execute("SELECT * FROM Account ORDER BY acc_name ASC").fetchall()
-    except:
-        create_table_account()
-        create_table_holder()
+    except sqlite3.OperationalError:
+        create_tables()
         show_all()
 
     connection.commit()
-    connection.close()
 
 
-def show_one(word, table, field):
-    connection = sqlite3.connect("data.db")
+def search(word, table):
+    global results, connection
+
     cur = connection.cursor()
-
     try:
-        cur.execute(f"SELECT * FROM {table} WHERE {field}=?", (word,))
+        cur.execute(f"SELECT * FROM {table} WHERE name=?", (word,))
         results = cur.fetchall()
 
-        if results:
-            return results
-        else:
-            return False
-    except:
-        create_table_account()
-        create_table_holder()
+        connection.commit()
+    except sqlite3.OperationalError:
+        connection.rollback()
+        create_tables()
 
-    connection.commit()
-    connection.close()
-
-
-# def search(word, mode):
-# 	results = ""
-# 	connection = sqlite3.connect("data.db")
-# 	cur = connection.cursor()
-
-# 	try:
-# 			results = cur.execute("SELECT * FROM Account").fetchall()
-# 	except:
-# 		create_table()
-# 		search(word, mode)
-# 	if mode == "Name":
-# 		for i in results:
-# 			if word in i[0]:
-# 				return True
-# 			else:
-# 				return False
-# 	else:
-# 		for i in results:
-# 			if word in i[1]:
-# 				return True
-# 			else:
-# 				return False
-
-# 	connection.commit()
-# 	connection.close()
+    if results:
+        return results
+    else:
+        return False
 
 
 def update_record(name, money):
-    connection = sqlite3.connect("data.db")
+    global connection
+
     cur = connection.cursor()
 
     try:
-        cur.execute("UPDATE Account SET acc_money = ? WHERE acc_name = ?", (money, name))
-    except:
-        create_table_account()
-        create_table_holder()
+        cur.execute("UPDATE Account SET acc_money = ? WHERE name = ?", (money, name))
 
-    connection.commit()
-    connection.close()
+        connection.commit()
+    except sqlite3.OperationalError:
+        connection.rollback()
+        create_tables()
 
 
 def delete_record(name):
-    connection = sqlite3.connect("data.db")
+    global connection
+
     cur = connection.cursor()
 
     try:
         cur.execute("DELETE from Account WHERE acc_name=?", (name,))
-    except:
-        create_table_account()
-        create_table_holder()
+        connection.commit()
+    except sqlite3.OperationalError:
+        connection.rollback()
+        create_tables()
 
-    connection.commit()
+
+def close_database_connection():
+    global connection
+
     connection.close()

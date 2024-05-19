@@ -5,17 +5,18 @@ import os
 import database_handler as db
 
 # Global Variable to store account object
-new_account = None
+# new_account = None
 new_account_holder = None
 
 
-# ================== Classes  =================================================================================
+# ================== Classes  ================================================================================
 class account_holder:
-    def __init__(self, holder_name, phone, email, address="Unknown"):
+    def __init__(self, holder_name, phone, email, address="", account_object=None):
         self.holder_name = holder_name
         self.phone = phone
         self.email = email
         self.address = address
+        self.account_object = account_object
 
     # -----------------------------------------------------------------
 
@@ -24,12 +25,12 @@ class account_holder:
         os.system('cls')
 
         print(" Account Holder Information ".center(50, '='))
-        print(f"\nName: '{self.holder_name}'")
+        print(f"\nName: '{self.holder_name.title()}'")
         print(f"Phone: '{self.phone}'")
         print(f"Email: '{self.email}'")
-        print(f"Address: '{self.address}'")
-        print(f"Account Type: {new_account.acc_type}")
-        print(f"Balance: {new_account.balance}")
+        print(f"Address: '{self.address.title()}'")
+        print(f"Account Type: {self.account_object.acc_type.title()}")
+        print(f"Balance: {self.account_object.balance}")
 
         input()
 
@@ -111,8 +112,8 @@ class account:
         user_choice = 0
         os.system('cls')
 
-        print(f"Logged in to '{self.cust_name}'")
-        print(f"Type: '{self.acc_type}'")
+        print(f"Logged in to '{self.cust_name.title()}'")
+        print(f"Type: '{self.acc_type.title()}'")
         print(f"Balance: '{self.balance}'")
         print("\n\n\t1. Deposit\n\t2. Withdraw\n\t3. Logout\n\t4. Request Account Info")
 
@@ -147,7 +148,7 @@ class account:
 
 # This function gets confidential to log in to account
 def start_login():
-    global new_account, new_account_holder
+    global new_account_holder
 
     name = None
     password = None
@@ -163,8 +164,8 @@ def start_login():
         start_login()
 
     # ===================Get account and account holder from database===================
-    results_account = db.show_one(name, "Account", "acc_name")  # Get account from database
-    results_holder = db.show_one(name, "Holder", "name")  # Get account holder from database
+    results_account = db.search(name, "Account")  # Get account from database
+    results_holder = db.search(name, "Holder")  # Get account holder from database
     # ==================================================================================
 
     # ===============Check if account exists in database==============
@@ -188,7 +189,7 @@ def start_login():
             new_account = account(results_account[0], results_account[1], results_account[2],
                                   results_account[3])  # Create account object
             new_account_holder = account_holder(results_holder[0], results_holder[1], results_holder[2],
-                                                results_holder[3])  # Create account_holder object
+                                                results_holder[3], new_account)  # Create account_holder object
         else:
             input("Wrong Password")
             start_login()
@@ -202,7 +203,7 @@ def start_login():
 
 # This function creates new account
 def create_new_account(a):
-    global new_account, new_account_holder
+    global new_account_holder
 
     name = None
     password = None
@@ -224,7 +225,7 @@ def create_new_account(a):
     try:
         name = input("\nEnter Your Name: ").lower()
 
-        results = db.show_one(name, "Account", "acc_name")  # Get account from database
+        results = db.search(name, "Account")  # Get account from database
 
         if results:  # Check if account already exists
             for x in results[0]:
@@ -256,15 +257,10 @@ def create_new_account(a):
     new_account = account(name, account_type if account_type else "Savings", balance, password)  # Create account object
 
     # Create new account_holder Object
-    if address:  # address is only passed if user entered it
-        new_account_holder = account_holder(name, phone, email, address)
-    else:
-        new_account_holder = account_holder(name, phone, email)
+    new_account_holder = account_holder(name, phone, email, address, new_account)
 
     # Save account to database
-    db.add_record_account(new_account.cust_name, new_account.acc_type, new_account.balance, new_account.password)
-    db.add_record_holder(new_account_holder.holder_name, new_account_holder.phone, new_account_holder.email,
-                         new_account_holder.address)
+    db.add_record(new_account_holder)
 
     input("\nAccount created Successfully")
     initialize_program()
@@ -293,6 +289,7 @@ def initialize_program():
     elif user_choice == 2:
         create_new_account(False)
     elif user_choice == 3:
+        db.close_database_connection()
         exit()
     else:
         initialize_program()  # If any other choice other than 1,2,3 is entered, function restarts
