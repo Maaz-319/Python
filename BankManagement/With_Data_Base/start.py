@@ -1,15 +1,16 @@
-# ============ Bank Management System ================
+# ================================================ Bank Management System ==========================================
 
 # ================== Imports ==========================
 import os
-import database_handler as db
+import database_handler as db # File that manages database operations
 
 # Global Variable to store account object
-# new_account = None
 new_account_holder = None
 
 
-# ================== Classes  ================================================================================
+# =========================================================================================================
+#                                             Classes
+# =========================================================================================================
 class account_holder:
     def __init__(self, holder_name, phone, email, address="", account_object=None):
         self.holder_name = holder_name
@@ -146,7 +147,7 @@ class account:
 # =========================================================================================================
 
 
-# This function gets confidential to log in to account
+# This function gets info to log in to account
 def start_login():
     global new_account_holder
 
@@ -299,8 +300,8 @@ def initialize_program():
 # =========================================================================================================
 #                                            Code by: Maaz Bin Asif
 #                                               Date: 17/05/2024
-#                                            Email: maazbinaasif@gmail.com
-#                                            Github: github.com/maaz-319
+#                                              Email: maazbinaasif@gmail.com
+#                                             Github: github.com/maaz-319
 # =========================================================================================================
 
 if __name__ == '__main__':
