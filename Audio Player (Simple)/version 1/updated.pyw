@@ -190,7 +190,7 @@ temp_play = Image.open("files/play.png")
 temp_play = temp_play.resize((100, 100))
 play_image = ImageTk.PhotoImage(temp_play)
 play_button = Button(root, image=play_image, borderwidth=0, background="#110b17", activebackground="#110b17",
-                     command=lambda:play_list_mus(0))
+                     command=lambda: play_list_mus(0))
 play_button.place(x=600, y=610)
 
 temp_pause = Image.open("files/pause.png")
@@ -216,7 +216,8 @@ style.configure("Cool.Horizontal.TProgressbar",
                 troughcolor="#3d3f42",  # Color of the trough (empty part) of the progress bar
                 thickness=2,
                 borderwidth=0)
-progress_bar = ttk.Progressbar(root, orient="horizontal", length=1000, mode="determinate", style="Cool.Horizontal.TProgressbar")
+progress_bar = ttk.Progressbar(root, orient="horizontal", length=1000, mode="determinate",
+                               style="Cool.Horizontal.TProgressbar")
 progress_bar.place(x=170, y=580)
 
 current_progress_label = Label(root, text='--:--', font=('Comic Sans MS', 14), fg='White', bg='#120f1a')
@@ -241,9 +242,11 @@ artist_label.place(x=50, y=370)
 genre_label = Label(font=('Comic Sans MS', 15), fg='#39FF14', bg='#151321')
 genre_label.place(x=50, y=450)
 
-style.configure("Cool.Horizontal.TScale", background="#0e0b16", troughcolor="#3d3f59", sliderthickness=12, sliderlength=40, sliderrelief="groove")
+style.configure("Cool.Horizontal.TScale", background="#0e0b16", troughcolor="#3d3f59", sliderthickness=12,
+                sliderlength=40, sliderrelief="groove")
 # volume_scale = Scale(root, from_=0, to=100, orient=HORIZONTAL, font=('Comic Sans MS',20), bg="#0e0b16", border=0, fg="white", sliderrelief='ridge', troughcolor='white', activebackground='#100d18', highlightbackground='#100d18', width=10, command=volume_slide_handle)
-volume_scale = ttk.Scale(root, from_=0, to=100, orient="horizontal", command=volume_slide_handle, style="Cool.Horizontal.TScale")
+volume_scale = ttk.Scale(root, from_=0, to=100, orient="horizontal", command=volume_slide_handle,
+                         style="Cool.Horizontal.TScale")
 volume_scale.place(x=1200, y=620)
 
 menu_bar = Menu(root)
@@ -255,7 +258,8 @@ menu_bar.add_cascade(label="File", menu=file_menu)
 root.config(menu=menu_bar)
 
 Label(root, font=('Comic Sans MS', 15), text='-:Audio List:-', bg="#1d2238", fg='White').place(x=1150, y=10)
-listbox = Listbox(root, selectmode=SINGLE, font=("Constancia", 15), bg='#1a1f32', border=0, fg='#FFFFFF', selectbackground='#2E7D32')
+listbox = Listbox(root, selectmode=SINGLE, font=("Constancia", 15), bg='#1a1f32', border=0, fg='#FFFFFF',
+                  selectbackground='#2E7D32')
 listbox.place(x=1100, y=50)
 preload(listbox)
 
