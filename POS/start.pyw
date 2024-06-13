@@ -15,12 +15,15 @@ total_price = 0
 new_item = None
 new_customer = None
 new_order = None
+item_price_entry = None
+item_name_entry = None
+save_item_window = None
 order_no = randint(0000, 9999)
 
 
 # Functions
 def save_item():
-    global new_item
+    global new_item, item_name_entry, item_price_entry, save_item_window
     try:
         item_name = item_name_entry.get()
         item_price = int(item_price_entry.get())
@@ -45,6 +48,32 @@ def save_item():
             # Save new item to Database
             new_item.save_item(order_data)
             messagebox.showinfo("Success", f"{new_item.name} added for Rs.{new_item.price}")
+            save_item_window.destroy()
+
+
+def create_save_item_window():
+    global item_name_entry, item_price_entry, save_item_window
+    save_item_window = Toplevel()
+    save_item_window.title("Add New Item")
+    save_item_window.geometry("400x200")
+    save_item_window.configure(bg=bg_color)
+    save_item_window.resizable(False, False)
+
+    item_name_label = Label(save_item_window, text="Item Name:", font=("Arial", 12), bg=bg_color, fg=text_color)
+    item_name_label.place(relx=0.1, rely=0.1)
+    item_name_entry = Entry(save_item_window, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
+    item_name_entry.place(relx=0.3, rely=0.1)
+
+    item_price_label = Label(save_item_window, text="Item Price:", font=("Arial", 12), bg=bg_color, fg=text_color)
+    item_price_label.place(relx=0.1, rely=0.3)
+    item_price_entry = Entry(save_item_window, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
+    item_price_entry.place(relx=0.3, rely=0.3)
+
+    save_button = Button(save_item_window, text="Save Item", font=("Arial", 12), bg=accent_color, fg="white",
+                         borderwidth=0, command=save_item)
+    save_button.place(relx=0.4, rely=0.5)
+
+    save_item_window.mainloop()
 
 
 def search_items():
@@ -96,7 +125,7 @@ def add_ordered_items():
     global total_price, new_item
     selected_item = items_list_box.curselection()
     try:
-        quantity = int(quantity_entry.get())
+        quantity = int(quantity_spinbox.get())
         if quantity < 1:
             raise ValueError
     except ValueError:
@@ -167,51 +196,60 @@ root.bind("<Return>", search_item)
 # ===============================================================
 
 # ================= Create a frame for the save item button ===========================
-save_item_frame = Frame(root, bg=bg_color, width=700, height=180, padx=10, pady=10)
-save_item_frame.place(x=5, y=5)
-
-Label(save_item_frame, text="Save Item", font=("Arial", 20, 'bold'), bg=bg_color, fg=primary_color).grid(row=0,
-                                                                                                         column=0,
-                                                                                                         columnspan=4,
-                                                                                                         pady=(0, 10))
-Label(save_item_frame, text="Item Name:", font=("Comic Sans MS", 12), bg=bg_color, fg=text_color).grid(row=1, column=0,
-                                                                                                       sticky='w')
-item_name_entry = Entry(save_item_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
-item_name_entry.grid(row=1, column=1, padx=10)
-Label(save_item_frame, text="Item Price:", font=("Comic Sans MS", 12), bg=bg_color, fg=text_color).grid(row=1, column=2,
-                                                                                                        sticky='w')
-item_price_entry = Entry(save_item_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
-item_price_entry.grid(row=1, column=3, padx=10)
-
-save_item_button = Button(save_item_frame, text="Save Item", font=("Arial", 12), bg=accent_color, fg="white",
+# save_item_frame = Frame(root, bg=bg_color, width=700, height=180, padx=10, pady=10)
+# save_item_frame.place(x=5, y=5)
+#
+# Label(save_item_frame, text="Item Name:", font=("Comic Sans MS", 12), bg=bg_color, fg=text_color).grid(row=1, column=0,
+#                                                                                                        sticky='w')
+# item_name_entry = Entry(save_item_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
+# item_name_entry.grid(row=1, column=1, padx=10)
+# Label(save_item_frame, text="Item Price:", font=("Comic Sans MS", 12), bg=bg_color, fg=text_color).grid(row=1, column=2,
+#                                                                                                         sticky='w')
+# item_price_entry = Entry(save_item_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
+# item_price_entry.grid(row=1, column=3, padx=10)
+#
+save_item_button = Button(root, text="Add New Item", font=("Arial", 12), bg=accent_color, fg="white",
                           borderwidth=0,
-                          command=save_item)
-save_item_button.grid(row=1, column=4, columnspan=2, pady=10, padx=10)
+                          command=create_save_item_window)
+save_item_button.place(relx=0.92, rely=0.005)
 # ====================================================================================
 
 
 # ======================== Create a frame for the items list ===========================
-items_list_frame = Frame(root, bg=bg_color, width=300, height=600, padx=10, pady=10)
-items_list_frame.place(relx=0.98, rely=0.5, anchor='e')
+items_list_frame = Frame(root, bg=bg_color, width=500, height=700, padx=10, pady=10)
+items_list_frame.place(relx=0.4, rely=0.5, anchor='e')
 
-Label(items_list_frame, text="Items List:", font=("Arial", 20, 'bold'), bg=bg_color, fg=primary_color).pack(
-    anchor='center', pady=(0, 10))
-search_var = StringVar()
-search_var.trace("w", search_items)
-items_list_box = Listbox(items_list_frame, width=30, height=20, font=("Arial", 15), bg="white", fg=primary_color,
+Label(items_list_frame, text="Items List:", font=("Arial", 20, 'bold'), bg=bg_color, fg=primary_color).place(relx=0.35,
+                                                                                                             rely=0.01)
+# search_var = StringVar()
+# search_var.trace("w", search_items)
+items_list_box = Listbox(items_list_frame, width=45, height=23, font=("Arial", 15), bg="white", fg=primary_color,
                          borderwidth=0, justify='center', selectbackground=accent_color, selectforeground="white",
                          selectmode=MULTIPLE)
-items_list_box.pack(pady=10)
+items_list_box.place(relx=0.5, rely=0.48, anchor='center')
+
+order_button = Button(items_list_frame, text="Add to Order", font=("Arial", 12), bg=primary_color, fg="white",
+                      borderwidth=0, width=20, height=1, command=add_ordered_items)
+order_button.place(relx=0.8, rely=0.915, anchor='center')
 
 delete_item_button = Button(items_list_frame, text="Delete Item", font=("Arial", 12), bg=accent_color, fg="white",
                             borderwidth=0, command=delete_item)
-delete_item_button.pack(pady=10)
+delete_item_button.place(relx=0.1, rely=0.915, anchor='center')
+
+Label(items_list_frame, text="Quantity:", font=("Comic Sans MS", 15), fg=primary_color, bg=bg_color).place(relx=0.23,
+                                                                                                           rely=0.96)
+# quantity_spinbox = Entry(items_list_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0, width=10,
+#                        justify='center')
+# quantity_spinbox.insert(END, '1')
+# quantity_spinbox.place(relx=0.43, rely=0.97)
+quantity_spinbox = Spinbox(items_list_frame, from_=1, to=100)
+quantity_spinbox.place(relx=0.43, rely=0.97)
 # ====================================================================================
 
 
 # ================ Create a frame for the order preview ===========================
 order_preview_frame = Frame(root, bg=bg_color, width=800, height=500, padx=10, pady=10)
-order_preview_frame.place(relx=0, rely=0.5, anchor='w')
+order_preview_frame.place(relx=0.58, rely=0.45, anchor='w')
 
 order_no_label = Label(order_preview_frame, text=f"Your Order: {order_no}", font=("Arial", 20, 'bold'), bg=bg_color,
                        fg=primary_color)
@@ -231,47 +269,34 @@ order_text_box_price = Listbox(order_preview_frame, width=30, height=18, font=("
                                fg=primary_color, borderwidth=1, justify='center', selectbackground="Light Green",
                                selectforeground="black", selectmode=SINGLE)
 order_text_box_price.place(relx=0.7, rely=0.15, anchor='ne')
+
+clear_order_button = Button(order_preview_frame, text="Clear Order", font=("Arial", 12), bg=error_color, fg="white",
+                            borderwidth=0, width=20, height=1, command=clear_order)
+clear_order_button.place(relx=0.25, rely=0.92)
 # ====================================================================================
 
+# ================= Create a frame for the total price ===========================
+total_price_frame = Frame(root, bg=bg_color, width=450, height=150, padx=10, pady=10)
+total_price_frame.place(relx=0.67, rely=0.9, anchor='w')
+Label(total_price_frame, text="Total Price(PKR):", font=("Comic Sans MS", 20), fg=primary_color, bg=bg_color).place(
+    relx=0.1, rely=0.05)
+price_label = Label(total_price_frame, text="0", font=("Arial", 20), fg=primary_color, bg=bg_color)
+price_label.place(relx=0.62, rely=0.07)
+order_button = Button(total_price_frame, text="Place Order", font=("Arial", 13), bg=primary_color, fg="white",
+                      borderwidth=0, width=20, height=2, command=place_order)
+order_button.place(relx=0.14, rely=0.5)
+# ====================================================================================
 
-# ====================== Main root elements ===========================
-# Frame
-main_frame = Frame(root, bg=bg_color, padx=10, pady=10)
-main_frame.place(relx=0.5, rely=0.9, anchor='center')
+# ====================== Search Frame ===========================
+search_frame = Frame(root, bg=bg_color, width=250, height=50, padx=10, pady=10)
+search_frame.place(relx=0.7, rely=0.03, anchor='w')
 
-order_button = Button(main_frame, text="Place Order", font=("Arial", 12), bg=primary_color, fg="white", borderwidth=0,
-                      width=20, height=1, command=place_order)
-order_button.grid(row=0, column=0, padx=20, pady=10)
-add_ordered_items_button = Button(main_frame, text="Add to Order", font=("Arial", 12), bg=primary_color, fg="white",
-                                  borderwidth=0, width=20, height=1, command=add_ordered_items)
-add_ordered_items_button.grid(row=0, column=1, padx=20, pady=10)
-
-Label(main_frame, text="Quantity:", font=("Comic Sans MS", 15), fg=primary_color, bg=bg_color).grid(row=1, column=0,
-                                                                                                    sticky='e',
-                                                                                                    padx=(0, 10))
-quantity_entry = Entry(main_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0, width=10,
-                       justify='center')
-quantity_entry.insert(END, '1')
-quantity_entry.grid(row=1, column=1, sticky='w')
-
-Label(main_frame, text="Total Price(PKR):", font=("Comic Sans MS", 15), fg=primary_color, bg=bg_color).grid(row=2,
-                                                                                                            column=0,
-                                                                                                            sticky='e',
-                                                                                                            padx=(
-                                                                                                                0, 10))
-price_label = Label(main_frame, text="0", font=("Arial", 15), fg=primary_color, bg=bg_color)
-price_label.grid(row=2, column=1, sticky='w')
-
-clear_order_button = Button(main_frame, text="Clear Order", font=("Arial", 12), bg=error_color, fg="white",
-                            borderwidth=0, width=20, height=1, command=clear_order)
-clear_order_button.grid(row=3, column=0, columnspan=2, pady=10)
-
-search_field = Entry(root, font=("Arial", 12), bg='light green', fg="black", borderwidth=0, width=15,
+search_field = Entry(search_frame, font=("Arial", 16), bg='light green', fg="black", borderwidth=0, width=15,
                      justify='left')
-search_field.place(relx=0.62, rely=0.5)
-search_button = Button(root, text="🔍", font=("Arial", 12), bg=primary_color, fg="white", borderwidth=0,
+search_field.place(relx=0.003, rely=0.1)
+search_button = Button(search_frame, text="🔍", font=("Arial", 12), bg=primary_color, fg="white", borderwidth=0,
                        width=2, height=1, command=search_item)
-search_button.place(relx=0.66, rely=0.53)
+search_button.place(relx=0.88, rely=0.1)
 search_field.bind("<FocusIn>", search_bar_text_focus_in)
 search_field.bind("<FocusOut>", search_bar_text_focus_out)
 search_bar_text_focus_out(None)
