@@ -1,4 +1,4 @@
-from data import items_name, items_price
+from data import items_list
 from database_handler import save_data_to_file
 
 
@@ -10,5 +10,5 @@ class Order:
     def save_order(self, order_text, total_price, order_data):
         order_text = f"Order No. {self.customer_id}\n{order_text}\n\nTotal Price: Rs {total_price}"
         order_data.append(order_text)
-        save_data_to_file(items_name, items_price, order_data)
+        save_data_to_file(items_list, order_data)
         return order_text

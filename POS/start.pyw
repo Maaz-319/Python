@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
-from data import items_name, items_price, order_data
+from data import order_data, items_list
 import class_item as item
 import class_order as order
 from random import randint
@@ -18,6 +18,7 @@ new_order = None
 item_price_entry = None
 item_name_entry = None
 save_item_window = None
+items_list_sorted = None
 order_no = randint(0000, 9999)
 
 
@@ -37,7 +38,7 @@ def save_item():
     if item_name == "":
         messagebox.showerror("Error", "All fields are required")
     else:
-        if item_name in items_name:
+        if item_name in items_list.keys():
             messagebox.showerror("Error", "Item already exists")
             return
         else:
@@ -47,11 +48,13 @@ def save_item():
 
             # Save new item to Database
             new_item.save_item(order_data)
+            preload()
             messagebox.showinfo("Success", f"{new_item.name} added for Rs.{new_item.price}")
+            items_list_box.select_set(list(items_list_sorted.keys()).index(new_item.name))
             save_item_window.destroy()
 
 
-def create_save_item_window():
+def create_save_item_window(_=None):
     global item_name_entry, item_price_entry, save_item_window
     save_item_window = Toplevel()
     save_item_window.title("Add New Item")
@@ -76,11 +79,7 @@ def create_save_item_window():
     save_item_window.mainloop()
 
 
-def search_items():
-    pass
-
-
-def delete_item():
+def delete_item(_=None):
     global new_item
     selected_index = items_list_box.curselection()
     if not selected_index:
@@ -90,14 +89,15 @@ def delete_item():
         messagebox.showerror("Error", "Please select only one item to delete")
         items_list_box.selection_clear(0, END)
         return
-    selected_index = selected_index[0]
-    selected_item = items_list_box.get(selected_index)
-    new_item = item.Item(selected_item, items_price[selected_index])
-    new_item.delete_item(order_data)
-    items_list_box.delete(selected_index)
-    selected_index = None
-
-    messagebox.showinfo("Deleted", f"'{new_item.name} - {new_item.price} Rs' has been deleted!")
+    if messagebox.askokcancel("Delete Item", "Are you sure you want to delete this item?"):
+        selected_index = selected_index[0]
+        selected_item = items_list_box.get(selected_index)
+        # print(items_list[selected_item])
+        new_item = item.Item(selected_item, items_list[selected_item])
+        new_item.delete_item(order_data)
+        selected_index = None
+        preload()
+        messagebox.showinfo("Deleted", f"'{new_item.name} - {new_item.price} Rs' has been deleted!")
 
 
 def place_order():
@@ -122,7 +122,7 @@ def place_order():
 
 
 def add_ordered_items():
-    global total_price, new_item
+    global total_price, new_item, items_list_sorted
     selected_item = items_list_box.curselection()
     try:
         quantity = int(quantity_spinbox.get())
@@ -135,12 +135,11 @@ def add_ordered_items():
     if not selected_item:
         messagebox.showerror("Error", "Please select an item to order")
         return
-
     for x in selected_item:
-        new_item = item.Item(items_name[x], items_price[x])
-        order_text_box_name.insert(END, items_name[x])
-        order_text_box_price.insert(END, str(items_price[x]) + ' x ' + str(quantity))
-        total_price += items_price[x] * quantity
+        new_item = item.Item(list(items_list_sorted.keys())[x], items_list[list(items_list_sorted.keys())[x]])
+        order_text_box_name.insert(END, list(items_list_sorted.keys())[x])
+        order_text_box_price.insert(END, str(items_list[list(items_list_sorted.keys())[x]]) + ' x ' + str(quantity))
+        total_price += items_list[list(items_list_sorted.keys())[x]] * quantity
     price_label.config(text=str(total_price))
     items_list_box.selection_clear(0, END)
 
@@ -151,39 +150,61 @@ def clear_order():
     price_label.config(text=str(total_price))
     order_text_box_name.delete(0, END)
     order_text_box_price.delete(0, END)
+    responsive_price_preview_label.config(text="")
 
 
 def preload():
-    if items_name and items_price:
-        for x in items_name:
+    global items_list_sorted
+    if items_list:
+        items_list_box.delete(0, END)
+        items_list_sorted = {key: items_list[key] for key in sorted(items_list)}
+        # items_list = items_list_sorted
+        for x in items_list_sorted.keys():
             items_list_box.insert(END, f"{x}")
 
 
 def search_item(_=None):
+    global items_list_sorted
     search_text = search_field.get()
     if search_text != "":
-        for x in items_name:
+        for x in items_list_sorted.keys():
             if len(search_text) == 1:
                 if search_text.lower() == x.lower()[0]:
                     items_list_box.selection_clear(0, END)
-                    items_list_box.select_set(items_name.index(x))
+                    items_list_box.select_set(list(items_list_sorted.keys()).index(x))
                     return
             else:
                 if search_text.lower() in x.lower():
                     items_list_box.selection_clear(0, END)
-                    items_list_box.select_set(items_name.index(x))
+                    items_list_box.select_set(list(items_list_sorted.keys()).index(x))
                     return
+    return
 
 
+# This function is called when the search bar is Focused or Clicked
 def search_bar_text_focus_in(event):
     search_field.delete(0, END)
     search_field['fg'] = 'black'
 
 
+# This function is called when the search bar is not focused or clicked
 def search_bar_text_focus_out(event):
     search_field.delete(0, END)
     search_field.insert(0, "Search Item")
     search_field['fg'] = 'grey'
+
+
+# This Function is called when the user presses the 'Ctrl + F' key combination
+def focus_search_bar(event):
+    search_field.focus_set()
+
+
+def on_select_order_name(event):
+    selection = order_text_box_name.curselection()
+    if selection:
+        responsive_price_preview_label.config(text=items_list[order_text_box_name.get(selection[0])])
+    else:
+        responsive_price_preview_label.config(text="")
 
 
 # ================ Initialize the root window ===================
@@ -193,25 +214,20 @@ root.state("zoomed")
 root.configure(bg=bg_color)
 root.resizable(False, False)
 root.bind("<Return>", search_item)
+root.bind('<Control-f>', focus_search_bar)
+root.bind('<Control-n>', create_save_item_window)
+root.bind('<Delete>', delete_item)
 # ===============================================================
 
-# ================= Create a frame for the save item button ===========================
-# save_item_frame = Frame(root, bg=bg_color, width=700, height=180, padx=10, pady=10)
-# save_item_frame.place(x=5, y=5)
-#
-# Label(save_item_frame, text="Item Name:", font=("Comic Sans MS", 12), bg=bg_color, fg=text_color).grid(row=1, column=0,
-#                                                                                                        sticky='w')
-# item_name_entry = Entry(save_item_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
-# item_name_entry.grid(row=1, column=1, padx=10)
-# Label(save_item_frame, text="Item Price:", font=("Comic Sans MS", 12), bg=bg_color, fg=text_color).grid(row=1, column=2,
-#                                                                                                         sticky='w')
-# item_price_entry = Entry(save_item_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
-# item_price_entry.grid(row=1, column=3, padx=10)
-#
+# ================= root items ===========================
 save_item_button = Button(root, text="Add New Item", font=("Arial", 12), bg=accent_color, fg="white",
                           borderwidth=0,
                           command=create_save_item_window)
 save_item_button.place(relx=0.92, rely=0.005)
+show_keyboard_shortcuts = Button(root, text="⌘", font=("Arial", 12), bg=primary_color, fg="white",
+                                 borderwidth=0, height=1, command=lambda: messagebox.showinfo("Keyboard Shortcuts",
+                                                                                              "Ctrl + F: Seach Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
+show_keyboard_shortcuts.place(relx=0.005, rely=0.005)
 # ====================================================================================
 
 
@@ -232,12 +248,19 @@ order_button = Button(items_list_frame, text="Add to Order", font=("Arial", 12),
                       borderwidth=0, width=20, height=1, command=add_ordered_items)
 order_button.place(relx=0.8, rely=0.915, anchor='center')
 
-delete_item_button = Button(items_list_frame, text="Delete Item", font=("Arial", 12), bg=accent_color, fg="white",
+delete_item_button = Button(items_list_frame, text="Delete Item", font=("Arial", 12), bg=error_color, fg="white",
                             borderwidth=0, command=delete_item)
 delete_item_button.place(relx=0.1, rely=0.915, anchor='center')
 
 Label(items_list_frame, text="Quantity:", font=("Comic Sans MS", 15), fg=primary_color, bg=bg_color).place(relx=0.23,
                                                                                                            rely=0.96)
+scrollbar = Scrollbar(items_list_frame, orient=VERTICAL, command=items_list_box.yview, takefocus=0, bg=bg_color,
+                      activebackground=primary_color, troughcolor=accent_color, highlightbackground=primary_color,
+                      highlightcolor=primary_color, relief='flat', bd=0, cursor='hand2', width=20)
+scrollbar.place(relx=0.99, rely=0.48, anchor='center', relheight=0.7)
+
+items_list_box.config(yscrollcommand=scrollbar.set)
+
 # quantity_spinbox = Entry(items_list_frame, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0, width=10,
 #                        justify='center')
 # quantity_spinbox.insert(END, '1')
@@ -257,11 +280,12 @@ order_no_label.place(relx=0.36, rely=0.01, anchor='center')
 
 Label(order_preview_frame, text="Item Name", font=("Comic Sans MS", 15, 'underline'), bg=bg_color,
       fg=primary_color).place(
-    relx=0.2, rely=0.1, anchor='center')
+    relx=0.17, rely=0.1, anchor='center')
 order_text_box_name = Listbox(order_preview_frame, width=30, height=18, font=("Arial", 13), bg="white",
                               fg=primary_color, borderwidth=1, justify='left', selectbackground="Light Green",
                               selectforeground="black", selectmode=SINGLE)
 order_text_box_name.place(relx=0, rely=0.15, anchor='nw')
+order_text_box_name.bind('<<ListboxSelect>>', lambda e: on_select_order_name(order_text_box_name))
 
 Label(order_preview_frame, text="Price", font=("Comic Sans MS", 15, 'underline'), bg=bg_color, fg=primary_color).place(
     relx=0.52, rely=0.1, anchor='center')
@@ -269,10 +293,14 @@ order_text_box_price = Listbox(order_preview_frame, width=30, height=18, font=("
                                fg=primary_color, borderwidth=1, justify='center', selectbackground="Light Green",
                                selectforeground="black", selectmode=SINGLE)
 order_text_box_price.place(relx=0.7, rely=0.15, anchor='ne')
+order_text_box_price.bind('<<ListboxSelect>>', lambda e: on_select_order_name(order_text_box_price))
 
 clear_order_button = Button(order_preview_frame, text="Clear Order", font=("Arial", 12), bg=error_color, fg="white",
                             borderwidth=0, width=20, height=1, command=clear_order)
 clear_order_button.place(relx=0.25, rely=0.92)
+responsive_price_preview_label = Label(order_preview_frame, font=("Comic Sans MS", 10),
+                                       fg=primary_color, bg=bg_color)
+responsive_price_preview_label.place(relx=0.57, rely=0.08)
 # ====================================================================================
 
 # ================= Create a frame for the total price ===========================
