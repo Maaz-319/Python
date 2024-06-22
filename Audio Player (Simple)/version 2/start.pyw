@@ -112,7 +112,7 @@ def on_closing():
         root.destroy()
 
 
-def create_instance():
+def create_instance(_=None):
     global directory, new_song
     selected = listbox.curselection()
     if selected:
@@ -232,6 +232,7 @@ listbox = tk.Listbox(root, width=50, height=20, font=font_small, selectmode=tk.S
                      background=color_background, selectbackground="light green", selectforeground="black",
                      highlightcolor="#444444", highlightthickness=1)
 listbox.place(relx=0.99, rely=0.1, anchor="ne", height=screen_height - 100, width=350)
+listbox.bind("<Double-Button-1>", create_instance)
 # ================================================================
 
 # =============== Create the buttons ============================
