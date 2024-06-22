@@ -121,7 +121,7 @@ def place_order():
     order_no_label.config(text=f"Your Order: {order_no}")
 
 
-def add_ordered_items():
+def add_ordered_items(_=None):
     global total_price, new_item, items_list_sorted
     selected_item = items_list_box.curselection()
     try:
@@ -243,6 +243,7 @@ items_list_box = Listbox(items_list_frame, width=45, height=23, font=("Arial", 1
                          borderwidth=0, justify='center', selectbackground=accent_color, selectforeground="white",
                          selectmode=MULTIPLE)
 items_list_box.place(relx=0.5, rely=0.48, anchor='center')
+items_list_box.bind("<Double-Button-1>", add_ordered_items)
 
 order_button = Button(items_list_frame, text="Add to Order", font=("Arial", 12), bg=primary_color, fg="white",
                       borderwidth=0, width=20, height=1, command=add_ordered_items)
