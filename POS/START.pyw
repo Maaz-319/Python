@@ -101,7 +101,7 @@ def signup(username, password, admin_pass):
 # Define the Window
 window = tk.Tk()
 window.title("Welcome to POS Login")
-window.geometry("200x250")
+window.geometry("300x250")
 window.resizable(False, False)
 
 # ================== Login Frame ==================
