@@ -1,9 +1,10 @@
 from tkinter import *
 from tkinter import messagebox
-from data import order_data, items_list
+from data import order_data, items_list, current_cashier, cashier_login
 import class_item as item
 import class_order as order
 from random import randint
+import datetime
 
 # Global variables
 bg_color = "#f0f0f0"
@@ -23,6 +24,14 @@ order_no = randint(0000, 9999)
 
 
 # Functions
+def authorize():
+    if not current_cashier:
+        messagebox.showerror("Error", "Please login to continue")
+        root.destroy()
+    else:
+        preload()
+
+
 def save_item():
     global new_item, item_name_entry, item_price_entry, save_item_window
     try:
@@ -114,11 +123,20 @@ def place_order():
         new_item = item.Item(x, orders_price[orders_name.index(x)])
         new_order.items.append(new_item)
         order_text = f"{order_text}\n{x} - {orders_price[orders_name.index(x)]}"
-    receipt_text = new_order.save_order(order_text, total_price, order_data)
-    messagebox.showinfo("Order Placed!", receipt_text)
+    receipt_text = new_order.save_order(order_text, total_price, order_data,
+                                        datetime.datetime.now().strftime("%I:%M %p, %d:%m:%Y"))
+    user_choice = messagebox.askquestion("Order Placed!", f"{receipt_text}\n\n\nPrint Receipt?", icon='info')
+    print_receipt(receipt_text) if user_choice == 'yes' else None
     clear_order()
     order_no = randint(0000, 9999)
     order_no_label.config(text=f"Your Order: {order_no}")
+
+
+def print_receipt(receipt_text):
+    with open(f'{order_no}.txt', 'w') as f:
+        f.write(receipt_text)
+        f.close()
+    messagebox.showinfo("Receipt Printed", "Receipt has been printed successfully")
 
 
 def add_ordered_items(_=None):
@@ -207,12 +225,23 @@ def on_select_order_name(event):
         responsive_price_preview_label.config(text="")
 
 
+def on_closing():
+    if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        with open('data.py', 'w') as f:
+            f.write(
+                f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = None\n')
+            f.close()
+        root.destroy()
+
+
 # ================ Initialize the root window ===================
 root = Tk()
 root.title("POS System")
 root.state("zoomed")
 root.configure(bg=bg_color)
 root.resizable(False, False)
+root.protocol("WM_DELETE_WINDOW", on_closing)
+
 root.bind("<Return>", search_item)
 root.bind('<Control-f>', focus_search_bar)
 root.bind('<Control-n>', create_save_item_window)
@@ -228,6 +257,9 @@ show_keyboard_shortcuts = Button(root, text="⌘", font=("Arial", 12), bg=primar
                                  borderwidth=0, height=1, command=lambda: messagebox.showinfo("Keyboard Shortcuts",
                                                                                               "Ctrl + F: Seach Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
 show_keyboard_shortcuts.place(relx=0.005, rely=0.005)
+Cashier_label = Label(root, text=f"Logged in: {current_cashier}", font=("Arial", 12, 'bold'), bg=bg_color,
+                      fg=primary_color)
+Cashier_label.place(relx=0.1, rely=0.015, anchor='center')
 # ====================================================================================
 
 
@@ -330,7 +362,7 @@ search_field.bind("<FocusIn>", search_bar_text_focus_in)
 search_field.bind("<FocusOut>", search_bar_text_focus_out)
 search_bar_text_focus_out(None)
 # ====================================================================================
-preload()
+authorize()
 
 # Run the main loop
 root.mainloop()
