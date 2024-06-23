@@ -81,6 +81,19 @@ For any questions or issues, please contact:
 
 ## Screenshots
 
-*Include screenshots of the application here to make the README more visually appealing.*
+*Sign In*
+![image](https://github.com/Maaz-319/Python/assets/83403349/34da8505-fcc5-4a4a-9466-9540c523540c)
+
+*Apllication Preview*
+![image](https://github.com/Maaz-319/Python/assets/83403349/bf1ef50b-ca53-46da-924c-ba0d3b5416dc)
+
+*Order Placing*
+![image](https://github.com/Maaz-319/Python/assets/83403349/51ab1ffc-9585-4e1a-9898-fa3c56ad769e)
+
+*Add New Items*
+![image](https://github.com/Maaz-319/Python/assets/83403349/20cc5f18-e903-4dd1-8ac4-15dd2b461533)
+
+*Basic Error Handeling*
+![image](https://github.com/Maaz-319/Python/assets/83403349/c2fe3f83-8554-4b08-9445-2721bd5ff298)
 
 ---
