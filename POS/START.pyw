@@ -42,9 +42,9 @@ def login():
 
 
 def create_signup():
-    signup_window = tk.Toplevel(window)
+    signup_window = tk.Toplevel()
     signup_window.title("Sign Up")
-    signup_window.geometry("200x250")
+    signup_window.geometry("250x250")
     signup_window.resizable(False, False)
 
     signup_frame = tk.Frame(signup_window, bg=bg_color)
@@ -70,11 +70,11 @@ def create_signup():
 
     signup_button = tk.Button(signup_frame, text="Sign Up", bg=primary_color, fg="white", border=0,
                               font=("Comic Sans Ms", 10),
-                              command=lambda: signup(signup_username_entry, signup_password_entry, admin_code_entry))
+                              command=lambda: signup(signup_username_entry, signup_password_entry, admin_code_entry, signup_window))
     signup_button.pack()
 
 
-def signup(username, password, admin_pass):
+def signup(username, password, admin_pass, window_2):
     username = username.get().lower()
     password = password.get().lower()
     admin_pass = admin_pass.get()
@@ -92,10 +92,11 @@ def signup(username, password, admin_pass):
     cashier_login[username] = password
     with open('data.py', 'w') as f:
         f.write(
-            f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = "{current_cashier}"\n')
+            f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = None\n')
         f.close()
     messagebox.showinfo("Success", "Sign Up Successful\nPlease login to continue")
     window.destroy()
+    # window_2.destroy()
 
 
 # Define the Window

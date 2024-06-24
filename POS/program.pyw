@@ -227,9 +227,10 @@ def on_select_order_name(event):
 
 def on_closing():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
+        current_cashier = None
         with open('data.py', 'w') as f:
             f.write(
-                f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = None\n')
+                f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = {current_cashier}\n')
             f.close()
         root.destroy()
 
