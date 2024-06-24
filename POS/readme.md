@@ -94,6 +94,9 @@ For any questions or issues, please contact:
 *Apllication Preview*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/bf1ef50b-ca53-46da-924c-ba0d3b5416dc)
 
+*Dark Theme*
+![image](https://github.com/Maaz-319/Python/assets/83403349/dbe0437c-168c-450e-b02b-66c488bbe6b0)
+
 *Order Placing*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/51ab1ffc-9585-4e1a-9898-fa3c56ad769e)
 
