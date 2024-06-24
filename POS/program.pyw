@@ -227,12 +227,80 @@ def on_select_order_name(event):
 
 def on_closing():
     if messagebox.askokcancel("Quit", "Do you want to quit?"):
-        current_cashier = None
         with open('data.py', 'w') as f:
             f.write(
-                f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = {current_cashier}\n')
+                f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = None\n')
             f.close()
         root.destroy()
+
+
+def light_theme(element):
+    if element in [search_frame, items_list_frame, order_preview_frame, total_price_frame]:
+        element['background'] = bg_color
+        return
+    element['background'] = bg_color
+    element['foreground'] = text_color
+
+
+def dark_theme(element):
+    if element in [search_frame, items_list_frame, order_preview_frame, total_price_frame]:
+        element['background'] = text_color
+        return
+    element['background'] = text_color
+    element['foreground'] = bg_color
+
+
+def change_theme(mode):
+    if mode == 0:
+        # dark theme
+        theme_button['command'] = lambda: change_theme(1)
+        theme_button['text'] = 'Light Theme'
+
+        # managing colors
+        root.configure(bg=text_color)
+        light_theme(theme_button)
+        dark_theme(search_frame)
+        dark_theme(items_list_frame)
+        dark_theme(order_preview_frame)
+        dark_theme(total_price_frame)
+        dark_theme(order_no_label)
+        dark_theme(responsive_price_preview_label)
+        dark_theme(price_label)
+        dark_theme(order_text_box_name)
+        dark_theme(order_text_box_price)
+        dark_theme(cashier_label)
+        dark_theme(item_list_preview_label)
+        dark_theme(total_price_preview_label)
+        dark_theme(item_name_preview_label)
+        dark_theme(item_price_preview_label)
+        dark_theme(quantity_preview_label)
+        dark_theme(items_list_box)
+        dark_theme(quantity_spinbox)
+    else:
+        # light theme
+        theme_button['command'] = lambda: change_theme(0)
+        theme_button['text'] = 'Dark Theme'
+
+        # managing colors
+        root.configure(bg=bg_color)
+        dark_theme(theme_button)
+        light_theme(search_frame)
+        light_theme(items_list_frame)
+        light_theme(order_preview_frame)
+        light_theme(total_price_frame)
+        light_theme(order_no_label)
+        light_theme(responsive_price_preview_label)
+        light_theme(price_label)
+        light_theme(order_text_box_name)
+        light_theme(order_text_box_price)
+        light_theme(cashier_label)
+        light_theme(item_list_preview_label)
+        light_theme(total_price_preview_label)
+        light_theme(item_name_preview_label)
+        light_theme(item_price_preview_label)
+        light_theme(quantity_preview_label)
+        light_theme(items_list_box)
+        light_theme(quantity_spinbox)
 
 
 # ================ Initialize the root window ===================
@@ -258,9 +326,12 @@ show_keyboard_shortcuts = Button(root, text="⌘", font=("Arial", 12), bg=primar
                                  borderwidth=0, height=1, command=lambda: messagebox.showinfo("Keyboard Shortcuts",
                                                                                               "Ctrl + F: Seach Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
 show_keyboard_shortcuts.place(relx=0.005, rely=0.005)
-Cashier_label = Label(root, text=f"Logged in: {current_cashier}", font=("Arial", 12, 'bold'), bg=bg_color,
+cashier_label = Label(root, text=f"Logged in: {current_cashier}", font=("Arial", 12, 'bold'), bg=bg_color,
                       fg=primary_color)
-Cashier_label.place(relx=0.1, rely=0.015, anchor='center')
+cashier_label.place(relx=0.1, rely=0.015, anchor='center')
+theme_button = Button(root, text='Dark Theme', font=("Arial", 12), height=1, borderwidth=0, bg=text_color, fg=bg_color,
+                      command=lambda: change_theme(0))
+theme_button.place(relx=0.45, rely=0.01)
 # ====================================================================================
 
 
@@ -268,8 +339,9 @@ Cashier_label.place(relx=0.1, rely=0.015, anchor='center')
 items_list_frame = Frame(root, bg=bg_color, width=500, height=700, padx=10, pady=10)
 items_list_frame.place(relx=0.4, rely=0.5, anchor='e')
 
-Label(items_list_frame, text="Items List:", font=("Arial", 20, 'bold'), bg=bg_color, fg=primary_color).place(relx=0.35,
-                                                                                                             rely=0.01)
+item_list_preview_label = Label(items_list_frame, text="Items List:", font=("Arial", 20, 'bold'), bg=bg_color,
+                                fg=primary_color)
+item_list_preview_label.place(relx=0.35, rely=0.01)
 # search_var = StringVar()
 # search_var.trace("w", search_items)
 items_list_box = Listbox(items_list_frame, width=45, height=23, font=("Arial", 15), bg="white", fg=primary_color,
@@ -286,11 +358,8 @@ delete_item_button = Button(items_list_frame, text="Delete Item", font=("Arial",
                             borderwidth=0, command=delete_item)
 delete_item_button.place(relx=0.1, rely=0.915, anchor='center')
 
-Label(items_list_frame, text="Quantity:", font=("Comic Sans MS", 15), fg=primary_color, bg=bg_color).place(relx=0.23,
-                                                                                                           rely=0.96)
-scrollbar = Scrollbar(items_list_frame, orient=VERTICAL, command=items_list_box.yview, takefocus=0, bg=bg_color,
-                      activebackground=primary_color, troughcolor=accent_color, highlightbackground=primary_color,
-                      highlightcolor=primary_color, relief='flat', bd=0, cursor='hand2', width=20)
+scrollbar = Scrollbar(items_list_frame, orient=VERTICAL, command=items_list_box.yview, takefocus=0, relief='flat', bd=0,
+                      cursor='hand2', width=20)
 scrollbar.place(relx=0.99, rely=0.48, anchor='center', relheight=0.7)
 
 items_list_box.config(yscrollcommand=scrollbar.set)
@@ -299,6 +368,9 @@ items_list_box.config(yscrollcommand=scrollbar.set)
 #                        justify='center')
 # quantity_spinbox.insert(END, '1')
 # quantity_spinbox.place(relx=0.43, rely=0.97)
+quantity_preview_label = Label(items_list_frame, text="Quantity:", font=("Comic Sans MS", 15), fg=primary_color,
+                               bg=bg_color)
+quantity_preview_label.place(relx=0.23, rely=0.96)
 quantity_spinbox = Spinbox(items_list_frame, from_=1, to=100)
 quantity_spinbox.place(relx=0.43, rely=0.97)
 # ====================================================================================
@@ -312,17 +384,19 @@ order_no_label = Label(order_preview_frame, text=f"Your Order: {order_no}", font
                        fg=primary_color)
 order_no_label.place(relx=0.36, rely=0.01, anchor='center')
 
-Label(order_preview_frame, text="Item Name", font=("Comic Sans MS", 15, 'underline'), bg=bg_color,
-      fg=primary_color).place(
-    relx=0.17, rely=0.1, anchor='center')
+item_name_preview_label = Label(order_preview_frame, text="Item Name", font=("Comic Sans MS", 15, 'underline'),
+                                bg=bg_color,
+                                fg=primary_color)
+item_name_preview_label.place(relx=0.17, rely=0.1, anchor='center')
 order_text_box_name = Listbox(order_preview_frame, width=30, height=18, font=("Arial", 13), bg="white",
                               fg=primary_color, borderwidth=1, justify='left', selectbackground="Light Green",
                               selectforeground="black", selectmode=SINGLE)
 order_text_box_name.place(relx=0, rely=0.15, anchor='nw')
 order_text_box_name.bind('<<ListboxSelect>>', lambda e: on_select_order_name(order_text_box_name))
 
-Label(order_preview_frame, text="Price", font=("Comic Sans MS", 15, 'underline'), bg=bg_color, fg=primary_color).place(
-    relx=0.52, rely=0.1, anchor='center')
+item_price_preview_label = Label(order_preview_frame, text="Price", font=("Comic Sans MS", 15, 'underline'),
+                                 bg=bg_color, fg=primary_color)
+item_price_preview_label.place(relx=0.52, rely=0.1, anchor='center')
 order_text_box_price = Listbox(order_preview_frame, width=30, height=18, font=("Arial", 13), bg="white",
                                fg=primary_color, borderwidth=1, justify='center', selectbackground="Light Green",
                                selectforeground="black", selectmode=SINGLE)
@@ -340,8 +414,9 @@ responsive_price_preview_label.place(relx=0.57, rely=0.08)
 # ================= Create a frame for the total price ===========================
 total_price_frame = Frame(root, bg=bg_color, width=450, height=150, padx=10, pady=10)
 total_price_frame.place(relx=0.67, rely=0.9, anchor='w')
-Label(total_price_frame, text="Total Price(PKR):", font=("Comic Sans MS", 20), fg=primary_color, bg=bg_color).place(
-    relx=0.1, rely=0.05)
+total_price_preview_label = Label(total_price_frame, text="Total Price(PKR):", font=("Comic Sans MS", 20),
+                                  fg=primary_color, bg=bg_color)
+total_price_preview_label.place(relx=0.1, rely=0.05)
 price_label = Label(total_price_frame, text="0", font=("Arial", 20), fg=primary_color, bg=bg_color)
 price_label.place(relx=0.62, rely=0.07)
 order_button = Button(total_price_frame, text="Place Order", font=("Arial", 13), bg=primary_color, fg="white",
@@ -364,6 +439,7 @@ search_field.bind("<FocusOut>", search_bar_text_focus_out)
 search_bar_text_focus_out(None)
 # ====================================================================================
 authorize()
+# preload()
 
 # Run the main loop
 root.mainloop()

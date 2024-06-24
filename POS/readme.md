@@ -9,6 +9,7 @@ The POS (Point of Sale) system is designed to streamline the sales process in re
 - **Order Processing**: Handle customer orders and transactions seamlessly.
 - **Database Integration**: Maintain persistent storage of data using a dictionary.
 - **User Interface**: Simple and intuitive interface for ease of use.
+- **Theme Change**: You can Use Light theme as well as Aesthetic dark Theme.
 
 ## Folder Structure
 

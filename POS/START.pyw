@@ -90,9 +90,10 @@ def signup(username, password, admin_pass, window_2):
         return
 
     cashier_login[username] = password
+    current_cashier = None
     with open('data.py', 'w') as f:
         f.write(
-            f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = None\n')
+            f'items_list = {items_list}\norder_data = {order_data}\ncashier_login = {cashier_login}\ncurrent_cashier = {current_cashier}\n')
         f.close()
     messagebox.showinfo("Success", "Sign Up Successful\nPlease login to continue")
     window.destroy()
