@@ -13,11 +13,17 @@ The POS (Point of Sale) system is designed to streamline the sales process in re
 ## Folder Structure
 
 POS-v4.0/
+
 ├── START.pyw
+
 ├── class_item.py
+
 ├── class_order.py
+
 ├── data.py
+
 ├── database_handler.py
+
 ├── program.pyw
 
 
