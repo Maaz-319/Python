@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import messagebox
 from data import cashier_login, current_cashier, items_list, order_data
 import os
@@ -68,7 +69,7 @@ def create_signup():
     admin_code_entry = tk.Entry(signup_frame, bg=bg_color, fg=text_color, show="*")
     admin_code_entry.pack(pady=5)
 
-    signup_button = tk.Button(signup_frame, text="Sign Up", bg=primary_color, fg="white", border=0,
+    signup_button = tk.Button(signup_frame, cursor='hand2', text="Sign Up", bg=primary_color, fg="white", border=0,
                               font=("Comic Sans Ms", 10),
                               command=lambda: signup(signup_username_entry, signup_password_entry, admin_code_entry, signup_window))
     signup_button.pack()
@@ -102,8 +103,9 @@ def signup(username, password, admin_pass, window_2):
 
 # Define the Window
 window = tk.Tk()
+window.configure()
 window.title("Welcome to POS Login")
-window.geometry("300x250")
+window.geometry("300x300")
 window.resizable(False, False)
 
 # ================== Login Frame ==================
@@ -123,11 +125,11 @@ tk.Label(login_frame, text="Password", bg=bg_color, fg=text_color, font=("Comic 
 password_entry = tk.Entry(login_frame, bg=bg_color, fg=text_color, show="*")
 password_entry.pack(pady=5)
 
-login_button = tk.Button(login_frame, text="Login", bg=primary_color, fg="white", border=0, font=("Comic Sans Ms", 10),
+login_button = tk.Button(login_frame, cursor='hand2', text="Login", bg=primary_color, fg="white", border=0, font=("Comic Sans Ms", 10),
                          command=login)
 login_button.pack()
 
-signup_button = tk.Button(login_frame, text="Sign Up", bg=accent_color, fg="white", border=0,
+signup_button = tk.Button(login_frame, cursor='hand2', text="Sign Up", bg=accent_color, fg="white", border=0,
                           font=("Comic Sans Ms", 10),
                           command=create_signup)
 signup_button.pack(pady=10)

@@ -319,10 +319,9 @@ root.bind('<Delete>', delete_item)
 
 # ================= root items ===========================
 save_item_button = Button(root, text="Add New Item", font=("Arial", 12), bg=accent_color, fg="white",
-                          borderwidth=0,
-                          command=create_save_item_window)
+                          borderwidth=0, command=create_save_item_window, cursor='hand2')
 save_item_button.place(relx=0.92, rely=0.005)
-show_keyboard_shortcuts = Button(root, text="⌘", font=("Arial", 12), bg=primary_color, fg="white",
+show_keyboard_shortcuts = Button(root, text="⌘", font=("Arial", 12), bg=primary_color, fg="white", cursor='hand2',
                                  borderwidth=0, height=1, command=lambda: messagebox.showinfo("Keyboard Shortcuts",
                                                                                               "Ctrl + F: Seach Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
 show_keyboard_shortcuts.place(relx=0.005, rely=0.005)
@@ -330,7 +329,7 @@ cashier_label = Label(root, text=f"Logged in: {current_cashier}", font=("Arial",
                       fg=primary_color)
 cashier_label.place(relx=0.1, rely=0.015, anchor='center')
 theme_button = Button(root, text='Dark Theme', font=("Arial", 12), height=1, borderwidth=0, bg=text_color, fg=bg_color,
-                      command=lambda: change_theme(0))
+                      command=lambda: change_theme(0), cursor='hand2')
 theme_button.place(relx=0.45, rely=0.01)
 # ====================================================================================
 
@@ -346,16 +345,16 @@ item_list_preview_label.place(relx=0.35, rely=0.01)
 # search_var.trace("w", search_items)
 items_list_box = Listbox(items_list_frame, width=45, height=23, font=("Arial", 15), bg="white", fg=primary_color,
                          borderwidth=0, justify='center', selectbackground=accent_color, selectforeground="white",
-                         selectmode=MULTIPLE)
+                         selectmode=MULTIPLE, cursor='hand2')
 items_list_box.place(relx=0.5, rely=0.48, anchor='center')
 items_list_box.bind("<Double-Button-1>", add_ordered_items)
 
 order_button = Button(items_list_frame, text="Add to Order", font=("Arial", 12), bg=primary_color, fg="white",
-                      borderwidth=0, width=20, height=1, command=add_ordered_items)
+                      borderwidth=0, width=20, height=1, command=add_ordered_items, cursor='hand2')
 order_button.place(relx=0.8, rely=0.915, anchor='center')
 
 delete_item_button = Button(items_list_frame, text="Delete Item", font=("Arial", 12), bg=error_color, fg="white",
-                            borderwidth=0, command=delete_item)
+                            borderwidth=0, command=delete_item, cursor='hand2')
 delete_item_button.place(relx=0.1, rely=0.915, anchor='center')
 
 scrollbar = Scrollbar(items_list_frame, orient=VERTICAL, command=items_list_box.yview, takefocus=0, relief='flat', bd=0,
@@ -404,7 +403,7 @@ order_text_box_price.place(relx=0.7, rely=0.15, anchor='ne')
 order_text_box_price.bind('<<ListboxSelect>>', lambda e: on_select_order_name(order_text_box_price))
 
 clear_order_button = Button(order_preview_frame, text="Clear Order", font=("Arial", 12), bg=error_color, fg="white",
-                            borderwidth=0, width=20, height=1, command=clear_order)
+                            borderwidth=0, width=20, height=1, command=clear_order, cursor='hand2')
 clear_order_button.place(relx=0.25, rely=0.92)
 responsive_price_preview_label = Label(order_preview_frame, font=("Comic Sans MS", 10),
                                        fg=primary_color, bg=bg_color)
@@ -420,7 +419,7 @@ total_price_preview_label.place(relx=0.1, rely=0.05)
 price_label = Label(total_price_frame, text="0", font=("Arial", 20), fg=primary_color, bg=bg_color)
 price_label.place(relx=0.62, rely=0.07)
 order_button = Button(total_price_frame, text="Place Order", font=("Arial", 13), bg=primary_color, fg="white",
-                      borderwidth=0, width=20, height=2, command=place_order)
+                      borderwidth=0, width=20, height=2, command=place_order, cursor='hand2')
 order_button.place(relx=0.14, rely=0.5)
 # ====================================================================================
 
@@ -432,7 +431,7 @@ search_field = Entry(search_frame, font=("Arial", 16), bg='light green', fg="bla
                      justify='left')
 search_field.place(relx=0.003, rely=0.1)
 search_button = Button(search_frame, text="🔍", font=("Arial", 12), bg=primary_color, fg="white", borderwidth=0,
-                       width=2, height=1, command=search_item)
+                       width=2, height=1, command=search_item, cursor='hand2')
 search_button.place(relx=0.88, rely=0.1)
 search_field.bind("<FocusIn>", search_bar_text_focus_in)
 search_field.bind("<FocusOut>", search_bar_text_focus_out)
