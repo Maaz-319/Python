@@ -92,13 +92,13 @@ For any questions or issues, please contact:
 ![image](https://github.com/Maaz-319/Python/assets/83403349/34da8505-fcc5-4a4a-9466-9540c523540c)
 
 *Apllication Preview*
-![image](https://github.com/Maaz-319/Python/assets/83403349/bf1ef50b-ca53-46da-924c-ba0d3b5416dc)
+![image](https://github.com/Maaz-319/Python/assets/83403349/452126e1-5cdc-4adb-bc37-bc2f8b97f01a)
 
 *Dark Theme*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/dbe0437c-168c-450e-b02b-66c488bbe6b0)
 
 *Order Placing*
-![image](https://github.com/Maaz-319/Python/assets/83403349/51ab1ffc-9585-4e1a-9898-fa3c56ad769e)
+![image](https://github.com/Maaz-319/Python/assets/83403349/ced4594f-2889-4542-a0a2-7835e1333ed0)
 
 *Add New Items*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/20cc5f18-e903-4dd1-8ac4-15dd2b461533)
