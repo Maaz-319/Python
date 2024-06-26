@@ -63,31 +63,6 @@ def save_item():
             save_item_window.destroy()
 
 
-def create_save_item_window(_=None):
-    global item_name_entry, item_price_entry, save_item_window
-    save_item_window = Toplevel()
-    save_item_window.title("Add New Item")
-    save_item_window.geometry("400x200")
-    save_item_window.configure(bg=bg_color)
-    save_item_window.resizable(False, False)
-
-    item_name_label = Label(save_item_window, text="Item Name:", font=("Arial", 12), bg=bg_color, fg=text_color)
-    item_name_label.place(relx=0.1, rely=0.1)
-    item_name_entry = Entry(save_item_window, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
-    item_name_entry.place(relx=0.3, rely=0.1)
-
-    item_price_label = Label(save_item_window, text="Item Price:", font=("Arial", 12), bg=bg_color, fg=text_color)
-    item_price_label.place(relx=0.1, rely=0.3)
-    item_price_entry = Entry(save_item_window, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
-    item_price_entry.place(relx=0.3, rely=0.3)
-
-    save_button = Button(save_item_window, text="Save Item", font=("Arial", 12), bg=accent_color, fg="white",
-                         borderwidth=0, command=save_item)
-    save_button.place(relx=0.4, rely=0.5)
-
-    save_item_window.mainloop()
-
-
 def delete_item(_=None):
     global new_item
     selected_index = items_list_box.curselection()
@@ -162,6 +137,24 @@ def add_ordered_items(_=None):
     items_list_box.selection_clear(0, END)
 
 
+def search_item(_=None):
+    global items_list_sorted
+    search_text = search_field.get()
+    if search_text != "":
+        for x in items_list_sorted.keys():
+            if len(search_text) == 1:
+                if search_text.lower() == x.lower()[0]:
+                    items_list_box.selection_clear(0, END)
+                    items_list_box.select_set(list(items_list_sorted.keys()).index(x))
+                    return
+            else:
+                if search_text.lower() in x.lower():
+                    items_list_box.selection_clear(0, END)
+                    items_list_box.select_set(list(items_list_sorted.keys()).index(x))
+                    return
+    return
+
+
 def clear_order():
     global total_price
     total_price = 0
@@ -181,28 +174,35 @@ def preload():
             items_list_box.insert(END, f"{x}")
 
 
-def search_item(_=None):
-    global items_list_sorted
-    search_text = search_field.get()
-    if search_text != "":
-        for x in items_list_sorted.keys():
-            if len(search_text) == 1:
-                if search_text.lower() == x.lower()[0]:
-                    items_list_box.selection_clear(0, END)
-                    items_list_box.select_set(list(items_list_sorted.keys()).index(x))
-                    return
-            else:
-                if search_text.lower() in x.lower():
-                    items_list_box.selection_clear(0, END)
-                    items_list_box.select_set(list(items_list_sorted.keys()).index(x))
-                    return
-    return
-
-
 # This function is called when the search bar is Focused or Clicked
 def search_bar_text_focus_in(event):
     search_field.delete(0, END)
     search_field['fg'] = 'black'
+
+
+def create_save_item_window(_=None):
+    global item_name_entry, item_price_entry, save_item_window
+    save_item_window = Toplevel()
+    save_item_window.title("Add New Item")
+    save_item_window.geometry("400x200")
+    save_item_window.configure(bg=bg_color)
+    save_item_window.resizable(False, False)
+
+    item_name_label = Label(save_item_window, text="Item Name:", font=("Arial", 12), bg=bg_color, fg=text_color)
+    item_name_label.place(relx=0.1, rely=0.1)
+    item_name_entry = Entry(save_item_window, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
+    item_name_entry.place(relx=0.3, rely=0.1)
+
+    item_price_label = Label(save_item_window, text="Item Price:", font=("Arial", 12), bg=bg_color, fg=text_color)
+    item_price_label.place(relx=0.1, rely=0.3)
+    item_price_entry = Entry(save_item_window, font=("Arial", 12), bg="white", fg=text_color, borderwidth=0)
+    item_price_entry.place(relx=0.3, rely=0.3)
+
+    save_button = Button(save_item_window, text="Save Item", font=("Arial", 12), bg=accent_color, fg="white",
+                         borderwidth=0, command=save_item)
+    save_button.place(relx=0.4, rely=0.5)
+
+    save_item_window.mainloop()
 
 
 # This function is called when the search bar is not focused or clicked
@@ -215,14 +215,6 @@ def search_bar_text_focus_out(event):
 # This Function is called when the user presses the 'Ctrl + F' key combination
 def focus_search_bar(event):
     search_field.focus_set()
-
-
-def on_select_order_name(event):
-    selection = order_text_box_name.curselection()
-    if selection:
-        responsive_price_preview_label.config(text=items_list[order_text_box_name.get(selection[0])])
-    else:
-        responsive_price_preview_label.config(text="")
 
 
 def on_closing():
@@ -303,9 +295,25 @@ def change_theme(mode):
         light_theme(quantity_spinbox)
 
 
+def buttons_hover_control_focus_in(element, message):
+    if element in [order_text_box_name, order_text_box_price, items_list_box, search_field]:
+        root.title(f"POS | By Maaz | {message}")
+        return
+    element['borderwidth'] = 1
+    root.title(f"POS | By Maaz | {message}")
+
+
+def buttons_hover_control_focus_out(element):
+    if element in [order_text_box_name, order_text_box_price, items_list_box, search_field]:
+        root.title(f"POS | By Maaz")
+        return
+    element['borderwidth'] = 0
+    root.title("POS | By Maaz")
+
+
 # ================ Initialize the root window ===================
 root = Tk()
-root.title("POS System")
+root.title("POS | By Maaz")
 root.state("zoomed")
 root.configure(bg=bg_color)
 root.resizable(False, False)
@@ -320,17 +328,27 @@ root.bind('<Delete>', delete_item)
 # ================= root items ===========================
 save_item_button = Button(root, text="Add New Item", font=("Arial", 12), bg=accent_color, fg="white",
                           borderwidth=0, command=create_save_item_window, cursor='hand2')
+save_item_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(save_item_button, "Add New Item"))
+save_item_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(save_item_button))
+
 save_item_button.place(relx=0.92, rely=0.005)
+
 show_keyboard_shortcuts = Button(root, text="⌘", font=("Arial", 12), bg=primary_color, fg="white", cursor='hand2',
                                  borderwidth=0, height=1, command=lambda: messagebox.showinfo("Keyboard Shortcuts",
-                                                                                              "Ctrl + F: Seach Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
+                                                                                              "Ctrl + F: Search Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
 show_keyboard_shortcuts.place(relx=0.005, rely=0.005)
+show_keyboard_shortcuts.bind("<Enter>", lambda e: buttons_hover_control_focus_in(show_keyboard_shortcuts, "View all Keyboard Shortcuts to Use POS with Ease"))
+show_keyboard_shortcuts.bind("<Leave>", lambda e: buttons_hover_control_focus_out(show_keyboard_shortcuts))
+
 cashier_label = Label(root, text=f"Logged in: {current_cashier}", font=("Arial", 12, 'bold'), bg=bg_color,
                       fg=primary_color)
 cashier_label.place(relx=0.1, rely=0.015, anchor='center')
+
 theme_button = Button(root, text='Dark Theme', font=("Arial", 12), height=1, borderwidth=0, bg=text_color, fg=bg_color,
                       command=lambda: change_theme(0), cursor='hand2')
 theme_button.place(relx=0.45, rely=0.01)
+theme_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(theme_button, "Change the Colour theme of the Program"))
+theme_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(theme_button))
 # ====================================================================================
 
 
@@ -343,19 +361,26 @@ item_list_preview_label = Label(items_list_frame, text="Items List:", font=("Ari
 item_list_preview_label.place(relx=0.35, rely=0.01)
 # search_var = StringVar()
 # search_var.trace("w", search_items)
+
 items_list_box = Listbox(items_list_frame, width=45, height=23, font=("Arial", 15), bg="white", fg=primary_color,
                          borderwidth=0, justify='center', selectbackground=accent_color, selectforeground="white",
                          selectmode=MULTIPLE, cursor='hand2')
 items_list_box.place(relx=0.5, rely=0.48, anchor='center')
 items_list_box.bind("<Double-Button-1>", add_ordered_items)
+items_list_box.bind("<Enter>", lambda e: buttons_hover_control_focus_in(items_list_box, "Double Click any Item to Add it to your Order"))
+items_list_box.bind("<Leave>", lambda e: buttons_hover_control_focus_out(items_list_box))
 
 order_button = Button(items_list_frame, text="Add to Order", font=("Arial", 12), bg=primary_color, fg="white",
                       borderwidth=0, width=20, height=1, command=add_ordered_items, cursor='hand2')
 order_button.place(relx=0.8, rely=0.915, anchor='center')
+order_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(order_button, "Add Selected Items to your Order"))
+order_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(order_button))
 
 delete_item_button = Button(items_list_frame, text="Delete Item", font=("Arial", 12), bg=error_color, fg="white",
                             borderwidth=0, command=delete_item, cursor='hand2')
 delete_item_button.place(relx=0.1, rely=0.915, anchor='center')
+delete_item_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(delete_item_button, "Delete Selected Item from DataBase"))
+delete_item_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(delete_item_button))
 
 scrollbar = Scrollbar(items_list_frame, orient=VERTICAL, command=items_list_box.yview, takefocus=0, relief='flat', bd=0,
                       cursor='hand2', width=20)
@@ -370,6 +395,7 @@ items_list_box.config(yscrollcommand=scrollbar.set)
 quantity_preview_label = Label(items_list_frame, text="Quantity:", font=("Comic Sans MS", 15), fg=primary_color,
                                bg=bg_color)
 quantity_preview_label.place(relx=0.23, rely=0.96)
+
 quantity_spinbox = Spinbox(items_list_frame, from_=1, to=100)
 quantity_spinbox.place(relx=0.43, rely=0.97)
 # ====================================================================================
@@ -391,7 +417,8 @@ order_text_box_name = Listbox(order_preview_frame, width=30, height=18, font=("A
                               fg=primary_color, borderwidth=1, justify='left', selectbackground="Light Green",
                               selectforeground="black", selectmode=SINGLE)
 order_text_box_name.place(relx=0, rely=0.15, anchor='nw')
-order_text_box_name.bind('<<ListboxSelect>>', lambda e: on_select_order_name(order_text_box_name))
+order_text_box_name.bind("<Enter>", lambda f: buttons_hover_control_focus_in(order_text_box_name, "Item Price is Shown Right in Front of Each item"))
+order_text_box_name.bind("<Leave>", lambda f: buttons_hover_control_focus_out(order_text_box_name))
 
 item_price_preview_label = Label(order_preview_frame, text="Price", font=("Comic Sans MS", 15, 'underline'),
                                  bg=bg_color, fg=primary_color)
@@ -400,11 +427,15 @@ order_text_box_price = Listbox(order_preview_frame, width=30, height=18, font=("
                                fg=primary_color, borderwidth=1, justify='center', selectbackground="Light Green",
                                selectforeground="black", selectmode=SINGLE)
 order_text_box_price.place(relx=0.7, rely=0.15, anchor='ne')
-order_text_box_price.bind('<<ListboxSelect>>', lambda e: on_select_order_name(order_text_box_price))
+order_text_box_price.bind("<Enter>", lambda f: buttons_hover_control_focus_in(order_text_box_price, "Item Price is Shown Right in Front of Each item"))
+order_text_box_price.bind("<Leave>", lambda f: buttons_hover_control_focus_out(order_text_box_price))
 
 clear_order_button = Button(order_preview_frame, text="Clear Order", font=("Arial", 12), bg=error_color, fg="white",
                             borderwidth=0, width=20, height=1, command=clear_order, cursor='hand2')
 clear_order_button.place(relx=0.25, rely=0.92)
+clear_order_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(clear_order_button, "Remove all the Items from your Order"))
+clear_order_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(clear_order_button))
+
 responsive_price_preview_label = Label(order_preview_frame, font=("Comic Sans MS", 10),
                                        fg=primary_color, bg=bg_color)
 responsive_price_preview_label.place(relx=0.57, rely=0.08)
@@ -418,27 +449,34 @@ total_price_preview_label = Label(total_price_frame, text="Total Price(PKR):", f
 total_price_preview_label.place(relx=0.1, rely=0.05)
 price_label = Label(total_price_frame, text="0", font=("Arial", 20), fg=primary_color, bg=bg_color)
 price_label.place(relx=0.62, rely=0.07)
-order_button = Button(total_price_frame, text="Place Order", font=("Arial", 13), bg=primary_color, fg="white",
-                      borderwidth=0, width=20, height=2, command=place_order, cursor='hand2')
-order_button.place(relx=0.14, rely=0.5)
+place_order_button = Button(total_price_frame, text="Place Order", font=("Arial", 13), bg=primary_color, fg="white",
+                            borderwidth=0, width=20, height=2, command=place_order, cursor='hand2')
+place_order_button.place(relx=0.14, rely=0.5)
+place_order_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(place_order_button, "Place the Order for Selected Items"))
+place_order_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(place_order_button))
 # ====================================================================================
 
 # ====================== Search Frame ===========================
 search_frame = Frame(root, bg=bg_color, width=250, height=50, padx=10, pady=10)
 search_frame.place(relx=0.7, rely=0.03, anchor='w')
 
-search_field = Entry(search_frame, font=("Arial", 16), bg='light green', fg="black", borderwidth=0, width=15,
-                     justify='left')
-search_field.place(relx=0.003, rely=0.1)
 search_button = Button(search_frame, text="🔍", font=("Arial", 12), bg=primary_color, fg="white", borderwidth=0,
                        width=2, height=1, command=search_item, cursor='hand2')
 search_button.place(relx=0.88, rely=0.1)
+search_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(search_button, "Enter Item name in Search Bar and Press Enter or Click the Search Button"))
+search_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(search_button))
+
+search_field = Entry(search_frame, font=("Arial", 16), bg='light green', fg="black", borderwidth=0, width=15,
+                     justify='left')
+search_field.place(relx=0.003, rely=0.1)
+search_field.bind("<Enter>", lambda e: buttons_hover_control_focus_in(search_field, "Enter Item name in Search Bar and Press Enter or Click the Search Button"))
+search_field.bind("<Leave>", lambda e: buttons_hover_control_focus_out(search_field))
+
 search_field.bind("<FocusIn>", search_bar_text_focus_in)
 search_field.bind("<FocusOut>", search_bar_text_focus_out)
 search_bar_text_focus_out(None)
 # ====================================================================================
 authorize()
 # preload()
-
 # Run the main loop
 root.mainloop()
