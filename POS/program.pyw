@@ -135,6 +135,8 @@ def add_ordered_items(_=None):
         total_price += items_list[list(items_list_sorted.keys())[x]] * quantity
     price_label.config(text=str(total_price))
     items_list_box.selection_clear(0, END)
+    quantity_spinbox.delete(0, "end")
+    quantity_spinbox.insert(0, "1")
 
 
 def search_item(_=None):
