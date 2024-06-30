@@ -1,4 +1,4 @@
-# POS-v4.0
+# POS-v5.0
 
 ## Overview
 
@@ -10,10 +10,11 @@ The POS (Point of Sale) system is designed to streamline the sales process in re
 - **Database Integration**: Maintain persistent storage of data using a dictionary.
 - **User Interface**: Simple and intuitive interface for ease of use.
 - **Theme Change**: You can Use Light theme as well as Aesthetic dark Theme.
+- **Modify Item**: You can change the Price of any Item again.
 
 ## Folder Structure
 
-POS-v4.0/
+POS-v5.0/
 
 ├── START.pyw
 
@@ -102,6 +103,9 @@ For any questions or issues, please contact:
 
 *Add New Items*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/20cc5f18-e903-4dd1-8ac4-15dd2b461533)
+
+*Modifying Item*
+![image](https://github.com/Maaz-319/Python/assets/83403349/eaee4c8a-eef7-4243-b2ff-9e1049986f41)
 
 *Basic Error Handeling*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/c2fe3f83-8554-4b08-9445-2721bd5ff298)
