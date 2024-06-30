@@ -14,3 +14,7 @@ class Item:
     def delete_item(self, order_data):
         items_list.pop(self.name)
         save_data_to_file(items_list, order_data)
+
+    def update_item(self, order_data):
+        items_list[self.name] = self.price
+        save_data_to_file(items_list, order_data)

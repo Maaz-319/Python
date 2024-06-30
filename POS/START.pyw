@@ -14,7 +14,7 @@ error_color = "#ff5252"
 
 
 # Function to log in
-def login():
+def login(_=None):
     username = username_entry.get().lower()
     password = password_entry.get().lower()
 
@@ -39,7 +39,7 @@ def login():
         f.close()
     messagebox.showinfo("Success", "Login Successful")
     window.destroy()
-    os.system('program.pyw')
+    os.system('program.exe')
 
 
 def create_signup():
@@ -107,6 +107,7 @@ window.configure()
 window.title("Welcome to POS Login")
 window.geometry("300x300")
 window.resizable(False, False)
+window.bind("<Return>", login)
 
 # ================== Login Frame ==================
 login_frame = tk.Frame(window, bg=bg_color)
