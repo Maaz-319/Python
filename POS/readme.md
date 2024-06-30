@@ -42,15 +42,15 @@ POS-v5.0/
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/Maaz-319/POS-v4.0.git
+    git clone https://github.com/Maaz-319/POS-v5.0.git
     ```
 2. Navigate to the project directory:
     ```sh
-    cd POS-v4.0
+    cd POS-v5.0
     ```
 3. Install required dependencies:
     ```sh
-    pip install -r requirements.txt
+    pip install -r readme.md
     ```
 
 ## Usage
