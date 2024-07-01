@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 from tkinter import messagebox
 from data import cashier_login, current_cashier, items_list, order_data
 import os
@@ -39,7 +38,7 @@ def login(_=None):
         f.close()
     messagebox.showinfo("Success", "Login Successful")
     window.destroy()
-    os.system('program.exe')
+    os.system('program.pyw')
 
 
 def create_signup():
@@ -71,7 +70,8 @@ def create_signup():
 
     signup_button = tk.Button(signup_frame, cursor='hand2', text="Sign Up", bg=primary_color, fg="white", border=0,
                               font=("Comic Sans Ms", 10),
-                              command=lambda: signup(signup_username_entry, signup_password_entry, admin_code_entry, signup_window))
+                              command=lambda: signup(signup_username_entry, signup_password_entry, admin_code_entry,
+                                                     signup_window))
     signup_button.pack()
 
 
@@ -126,7 +126,8 @@ tk.Label(login_frame, text="Password", bg=bg_color, fg=text_color, font=("Comic 
 password_entry = tk.Entry(login_frame, bg=bg_color, fg=text_color, show="*")
 password_entry.pack(pady=5)
 
-login_button = tk.Button(login_frame, cursor='hand2', text="Login", bg=primary_color, fg="white", border=0, font=("Comic Sans Ms", 10),
+login_button = tk.Button(login_frame, cursor='hand2', text="Login", bg=primary_color, fg="white", border=0,
+                         font=("Comic Sans Ms", 10),
                          command=login)
 login_button.pack()
 

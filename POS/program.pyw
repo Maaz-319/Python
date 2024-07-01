@@ -5,6 +5,7 @@ import class_item as item
 import class_order as order
 from random import randint
 import datetime
+import webbrowser
 
 # Global variables
 bg_color = "#f0f0f0"
@@ -20,6 +21,7 @@ item_price_entry = None
 item_name_entry = None
 save_item_window = None
 items_list_sorted = None
+theme_changed = False
 order_no = randint(0000, 9999)
 
 
@@ -88,10 +90,10 @@ def create_modify_item_price(_=None):
     global new_item
     selected_index = items_list_box.curselection()
     if not selected_index:
-        messagebox.showerror("Error", "Please select an item to delete")
+        messagebox.showerror("Error", "Please select an item to Modify")
         return
     elif len(selected_index) > 1:
-        messagebox.showerror("Error", "Please select only one item to delete")
+        messagebox.showerror("Error", "Please select only one item to Modify")
         items_list_box.selection_clear(0, END)
         return
     else:
@@ -267,6 +269,10 @@ def create_save_item_window(_=None):
     save_item_window.mainloop()
 
 
+def feedback():
+    webbrowser.open_new_tab("https://forms.gle/PPwtdPAD4t975ZLD8")
+
+
 # This function is called when the search bar is not focused or clicked
 def search_bar_text_focus_out(event):
     search_field.delete(0, END)
@@ -303,15 +309,13 @@ def dark_theme(element):
     element['foreground'] = bg_color
 
 
-def change_theme(mode):
-    if mode == 0:
+def change_theme():
+    global theme_changed
+    if not theme_changed:
         # dark theme
-        theme_button['command'] = lambda: change_theme(1)
-        theme_button['text'] = 'Light Theme'
 
         # managing colors
         root.configure(bg=text_color)
-        light_theme(theme_button)
         dark_theme(search_frame)
         dark_theme(items_list_frame)
         dark_theme(order_preview_frame)
@@ -331,12 +335,9 @@ def change_theme(mode):
         dark_theme(quantity_spinbox)
     else:
         # light theme
-        theme_button['command'] = lambda: change_theme(0)
-        theme_button['text'] = 'Dark Theme'
 
         # managing colors
         root.configure(bg=bg_color)
-        dark_theme(theme_button)
         light_theme(search_frame)
         light_theme(items_list_frame)
         light_theme(order_preview_frame)
@@ -354,6 +355,7 @@ def change_theme(mode):
         light_theme(quantity_preview_label)
         light_theme(items_list_box)
         light_theme(quantity_spinbox)
+    theme_changed = not theme_changed
 
 
 def buttons_hover_control_focus_in(element, message):
@@ -385,34 +387,6 @@ root.bind('<Control-f>', focus_search_bar)
 root.bind('<Control-n>', create_save_item_window)
 root.bind('<Delete>', delete_item)
 # ===============================================================
-
-# ================= root items ===========================
-save_item_button = Button(root, text="Add New Item", font=("Arial", 12), bg=accent_color, fg="white",
-                          borderwidth=0, command=create_save_item_window, cursor='hand2')
-save_item_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(save_item_button, "Add New Item"))
-save_item_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(save_item_button))
-
-save_item_button.place(relx=0.92, rely=0.005)
-
-show_keyboard_shortcuts = Button(root, text="⌘", font=("Arial", 12), bg=primary_color, fg="white", cursor='hand2',
-                                 borderwidth=0, height=1, command=lambda: messagebox.showinfo("Keyboard Shortcuts",
-                                                                                              "Ctrl + F: Search Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
-show_keyboard_shortcuts.place(relx=0.005, rely=0.005)
-show_keyboard_shortcuts.bind("<Enter>", lambda e: buttons_hover_control_focus_in(show_keyboard_shortcuts,
-                                                                                 "View all Keyboard Shortcuts to Use POS with Ease"))
-show_keyboard_shortcuts.bind("<Leave>", lambda e: buttons_hover_control_focus_out(show_keyboard_shortcuts))
-
-cashier_label = Label(root, text=f"Logged in: {current_cashier}", font=("Arial", 12, 'bold'), bg=bg_color,
-                      fg=primary_color)
-cashier_label.place(relx=0.1, rely=0.015, anchor='center')
-
-theme_button = Button(root, text='Dark Theme', font=("Arial", 12), height=1, borderwidth=0, bg=text_color, fg=bg_color,
-                      command=lambda: change_theme(0), cursor='hand2')
-theme_button.place(relx=0.45, rely=0.01)
-theme_button.bind("<Enter>",
-                  lambda e: buttons_hover_control_focus_in(theme_button, "Change the Colour theme of the Program"))
-theme_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(theme_button))
-# ====================================================================================
 
 
 # ======================== Create a frame for the items list ===========================
@@ -547,6 +521,47 @@ search_field.bind("<FocusIn>", search_bar_text_focus_in)
 search_field.bind("<FocusOut>", search_bar_text_focus_out)
 search_bar_text_focus_out(None)
 # ====================================================================================
+
+# ================= root items ===========================
+# save_item_button = Button(root, text="Add New Item", font=("Arial", 12), bg=accent_color, fg="white",
+#                           borderwidth=0, command=create_save_item_window, cursor='hand2')
+# save_item_button.bind("<Enter>", lambda e: buttons_hover_control_focus_in(save_item_button, "Add New Item"))
+# save_item_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(save_item_button))
+#
+# save_item_button.place(relx=0.92, rely=0.005)
+
+# show_keyboard_shortcuts = Button(root, text="⌘", font=("Arial", 12), bg=primary_color, fg="white", cursor='hand2',
+#                                  borderwidth=0, height=1, command=lambda: messagebox.showinfo("Keyboard Shortcuts",
+#                                                                                               "Ctrl + F: Search Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
+# show_keyboard_shortcuts.place(relx=0.005, rely=0.005)
+# show_keyboard_shortcuts.bind("<Enter>", lambda e: buttons_hover_control_focus_in(show_keyboard_shortcuts,
+#                                                                                  "View all Keyboard Shortcuts to Use POS with Ease"))
+# show_keyboard_shortcuts.bind("<Leave>", lambda e: buttons_hover_control_focus_out(show_keyboard_shortcuts))
+
+cashier_label = Label(root, text=f"Logged in: {current_cashier}", font=("Arial", 12, 'bold'), bg=bg_color,
+                      fg=primary_color)
+cashier_label.place(relx=0.1, rely=0.015, anchor='center')
+
+# theme_button = Button(root, text='Dark Theme', font=("Arial", 12), height=1, borderwidth=0, bg=text_color, fg=bg_color,
+#                       command=lambda: change_theme(0), cursor='hand2')
+# theme_button.place(relx=0.45, rely=0.01)
+# theme_button.bind("<Enter>",
+#                   lambda e: buttons_hover_control_focus_in(theme_button, "Change the Colour theme of the Program"))
+# theme_button.bind("<Leave>", lambda e: buttons_hover_control_focus_out(theme_button))
+
+menu_bar = Menu(root)
+file_menu = Menu(menu_bar, tearoff=0)
+menu_bar.add_cascade(label="File", menu=file_menu)
+file_menu.add_command(label="Add New Item", command=create_save_item_window)
+file_menu.add_command(label="Change Theme", command=change_theme)
+file_menu.add_command(label="Shortcuts", command=lambda: messagebox.showinfo("Keyboard Shortcuts",
+                                                                             "Ctrl + F: Search Item\nCtrl + N: Add New Item\nDelete: Delete Item"))
+file_menu.add_separator()
+file_menu.add_command(label="Feedback", command=feedback)
+file_menu.add_command(label="Exit", command=on_closing)
+root.config(menu=menu_bar)
+# ====================================================================================
+
 authorize()
 # preload()
 # Run the main loop
