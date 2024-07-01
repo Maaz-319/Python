@@ -1,4 +1,4 @@
-# POS-v5.0
+# POS-v7.0
 
 ## Overview
 
@@ -14,7 +14,7 @@ The POS (Point of Sale) system is designed to streamline the sales process in re
 
 ## Folder Structure
 
-POS-v5.0/
+POS-v7.0/
 
 ├── START.pyw
 
@@ -42,11 +42,11 @@ POS-v5.0/
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/Maaz-319/POS-v5.0.git
+    git clone https://github.com/Maaz-319/Python/tree/main/POS
     ```
 2. Navigate to the project directory:
     ```sh
-    cd POS-v5.0
+    cd POS-v7.0
     ```
 3. Install required dependencies:
     ```sh
@@ -93,13 +93,13 @@ For any questions or issues, please contact:
 ![image](https://github.com/Maaz-319/Python/assets/83403349/34da8505-fcc5-4a4a-9466-9540c523540c)
 
 *Apllication Preview*
-![image](https://github.com/Maaz-319/Python/assets/83403349/452126e1-5cdc-4adb-bc37-bc2f8b97f01a)
+![image](https://github.com/Maaz-319/Python/assets/83403349/0615041d-8676-4382-aa99-af75180a08fd)
 
 *Dark Theme*
-![image](https://github.com/Maaz-319/Python/assets/83403349/dbe0437c-168c-450e-b02b-66c488bbe6b0)
+![image](https://github.com/Maaz-319/Python/assets/83403349/a299ba14-771a-45f5-aa9d-9c79d778709b)
 
 *Order Placing*
-![image](https://github.com/Maaz-319/Python/assets/83403349/ced4594f-2889-4542-a0a2-7835e1333ed0)
+![image](https://github.com/Maaz-319/Python/assets/83403349/04c15e9f-453e-4119-9f9c-ed7c8fa1f542)
 
 *Add New Items*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/20cc5f18-e903-4dd1-8ac4-15dd2b461533)
