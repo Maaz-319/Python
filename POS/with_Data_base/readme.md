@@ -1,4 +1,4 @@
-# POS-v4.0
+# POS-v7.0
 
 ## Overview
 
@@ -7,24 +7,26 @@ The POS (Point of Sale) system is designed to streamline the sales process in re
 ## Key Features
 
 - **Order Processing**: Handle customer orders and transactions seamlessly.
-- **Database Integration**: Maintain persistent storage of data using a dictionary.
+- **Database Integration**: Maintain persistent storage of data using SQLITE.
 - **User Interface**: Simple and intuitive interface for ease of use.
 - **Theme Change**: You can Use Light theme as well as Aesthetic dark Theme.
+- **Modify Item**: You can change the Price of any Item again.
 
 ## Folder Structure
 
-POS-v4.0/
+POS-v7.0/
 
 ├── START.pyw
-
 ├── class_item.py
-
 ├── class_order.py
-
+├── class_cashier.py
 ├── data.py
-
-├── database_handler.py
-
+├── database_handler_item.py
+├── database_handler_order.py
+├── database_handler_cashier.py
+├── Items.db
+├── Orders.db
+├── Cashiers.py
 ├── program.pyw
 
 
@@ -33,23 +35,29 @@ POS-v4.0/
 - **START.pyw**: The main entry point of the POS application.
 - **class_item.py**: Contains the `Item` class which defines product attributes and methods.
 - **class_order.py**: Contains the `Order` class to manage customer orders.
-- **data.py**: Manages data loading and initial setup.
-- **database_handler.py**: Handles database operations such as read/write functions.
+- **class_cashier.py**: Contains the `Cashier` class to manage Cashiers.
+- **data.py**: Contains Program Settings.
+- **database_handler_item.py**: Handles database operations such as read/write functions for Items.
+- **database_handler_order.py**: Handles database operations such as read/write functions for Orders.
+- **database_handler_cashier.py**: Handles database operations such as read/write functions for Cashiers.
+- **Items.db**: Contains Item table that store all Items.
+- **Orders.db**: Contains Order table that store all Orders.
+- **Cashiers.db**: Contains Cashier table that store all Cashiers.
 - **program.pyw**: GUI implementation for the POS system.
 
 ## Installation
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/Maaz-319/POS-v4.0.git
+    git clone https://github.com/Maaz-319/Python/tree/main/POS
     ```
 2. Navigate to the project directory:
     ```sh
-    cd POS-v4.0
+    cd POS-v7.0
     ```
 3. Install required dependencies:
     ```sh
-    pip install -r requirements.txt
+    pip install -r readme.md
     ```
 
 ## Usage
@@ -92,16 +100,19 @@ For any questions or issues, please contact:
 ![image](https://github.com/Maaz-319/Python/assets/83403349/34da8505-fcc5-4a4a-9466-9540c523540c)
 
 *Apllication Preview*
-![image](https://github.com/Maaz-319/Python/assets/83403349/452126e1-5cdc-4adb-bc37-bc2f8b97f01a)
+![image](https://github.com/Maaz-319/Python/assets/83403349/0615041d-8676-4382-aa99-af75180a08fd)
 
 *Dark Theme*
-![image](https://github.com/Maaz-319/Python/assets/83403349/dbe0437c-168c-450e-b02b-66c488bbe6b0)
+![image](https://github.com/Maaz-319/Python/assets/83403349/a299ba14-771a-45f5-aa9d-9c79d778709b)
 
 *Order Placing*
-![image](https://github.com/Maaz-319/Python/assets/83403349/ced4594f-2889-4542-a0a2-7835e1333ed0)
+![image](https://github.com/Maaz-319/Python/assets/83403349/04c15e9f-453e-4119-9f9c-ed7c8fa1f542)
 
 *Add New Items*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/20cc5f18-e903-4dd1-8ac4-15dd2b461533)
+
+*Modifying Item*
+![image](https://github.com/Maaz-319/Python/assets/83403349/eaee4c8a-eef7-4243-b2ff-9e1049986f41)
 
 *Basic Error Handeling*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/c2fe3f83-8554-4b08-9445-2721bd5ff298)
