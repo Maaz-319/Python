@@ -8,7 +8,7 @@ class Item:
 
     def save_item(self):
         db_item.insert_data(self.name, self.price)
-        db.commit_the_changes()
+        db_item.commit_the_changes()
 
     def delete_item(self):
         db_item.delete_item(self.name)

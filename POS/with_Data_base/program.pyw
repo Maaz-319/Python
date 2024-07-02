@@ -145,12 +145,13 @@ def place_order():
         return
     orders_name = order_text_box_name.get(0, END)
     orders_price = order_text_box_price.get(0, END)
-    new_order = order.Order(order_no, [], str(datetime.datetime.now().strftime("%I:%M %p, %d:%m:%Y")), current_cashier)
+    new_order = order.Order(order_no, [], str(datetime.datetime.now().strftime("%d:%m:%Y")), current_cashier,
+                            total_price)
     for x in orders_name:
         new_item = item.Item(x, orders_price[orders_name.index(x)])
         new_order.items.append(new_item)
         order_text = f"{order_text}\n{x} - {orders_price[orders_name.index(x)]}"
-    receipt_text = new_order.save_order(order_text, total_price)
+    receipt_text = new_order.save_order(order_text)
     user_choice = messagebox.askquestion("Order Placed!", f"{receipt_text}\n\n\nPrint Receipt?", icon='info')
     print_receipt(receipt_text) if user_choice == 'yes' else None
     clear_order()

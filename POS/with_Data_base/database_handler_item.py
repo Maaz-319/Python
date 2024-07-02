@@ -35,11 +35,9 @@ def get_item_by_name(name):
 
 
 def get_all_items_name():
-    try:
-        data = cursor.execute("SELECT name FROM items ORDER BY name ASC").fetchall()
-        return [item[0].lower() for item in data]
-    except:
-        return False
+    data = cursor.execute("SELECT name FROM items ORDER BY name ASC").fetchall()
+    print([item[0].lower() for item in data])
+    return [item[0].lower() for item in data]
 
 
 def end_connection():

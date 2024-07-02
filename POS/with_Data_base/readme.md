@@ -17,27 +17,16 @@ The POS (Point of Sale) system is designed to streamline the sales process in re
 POS-v7.0/
 
 ├── START.pyw
-
 ├── class_item.py
-
 ├── class_order.py
-
 ├── class_cashier.py
-
 ├── data.py
-
 ├── database_handler_item.py
-
 ├── database_handler_order.py
-
 ├── database_handler_cashier.py
-
 ├── Items.db
-
 ├── Orders.db
-
 ├── Cashiers.py
-
 ├── program.pyw
 
 

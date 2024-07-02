@@ -100,7 +100,7 @@ def signup(username, password, admin_pass, window_2):
     new_cashier.add_cashier()
 
     current_cashier = None
-    with open('data.py', 'w') as f:
+    with open('ata.py', 'w') as f:
         f.write(
             f'current_cashier = {current_cashier}\n')
         f.close()
