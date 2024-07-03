@@ -21,7 +21,7 @@ new_cashier = None # variable for cashier object
 # -------------------------------------- Function to log in ---------------------------------------------
 def login(_=None):
     username = username_entry.get().lower()
-    password = password_entry.get().lower()
+    password = password_entry.get()
 
     # ------------------- Validation for Input Data ----------------------------
     if username == "" or password == "": # for empty entries
@@ -32,7 +32,7 @@ def login(_=None):
         username_entry.delete(0, tk.END)
         password_entry.delete(0, tk.END)
         return
-    elif db_cashier.get_item_by_name(username)[0][2] != password: # for wrong password
+    elif db_cashier.get_item_by_name(username)[2] != password: # for wrong password
         messagebox.showerror("Error", "Incorrect password")
         password_entry.delete(0, tk.END)
         username_entry.delete(0, tk.END)
@@ -91,7 +91,7 @@ def signup(username, password, admin_pass, window_2):
     global new_cashier
 
     username = username.get().lower()
-    password = password.get().lower()
+    password = password.get()
     admin_pass = admin_pass.get()
 
     # ---------- User Input Validation ------------------------------------

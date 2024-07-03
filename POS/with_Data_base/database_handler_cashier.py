@@ -29,11 +29,8 @@ def get_all_items():
         return False
 
 
-def get_item_by_name(name):
-    try:
-        return cursor.execute("SELECT * FROM cashier WHERE cashier_name=?", (name,)).fetchall()
-    except:
-        return False
+def get_item_by_name(word):
+    return cursor.execute("SELECT * FROM cashier WHERE cashier_name=?", (word,)).fetchone()
 
 
 def get_all_items_name():
@@ -47,5 +44,7 @@ def end_connection():
     conn.close()
 
 # create_table()
+# insert_data('test', '0000')
 # commit_the_changes()
-# end_connection()
+# print(get_all_items())
+# print(get_all_items_name())
