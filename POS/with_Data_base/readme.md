@@ -1,4 +1,4 @@
-# POS-v7.0
+# POS-v8.0
 
 ## Overview
 
@@ -11,23 +11,37 @@ The POS (Point of Sale) system is designed to streamline the sales process in re
 - **User Interface**: Simple and intuitive interface for ease of use.
 - **Theme Change**: You can Use Light theme as well as Aesthetic dark Theme.
 - **Modify Item**: You can change the Price of any Item again.
+- **Sales Report**: You can Generate the report of Sales In a date range.
 
 ## Folder Structure
 
-POS-v7.0/
+POS-v8.0/
 
 ├── START.pyw
+
 ├── class_item.py
+
 ├── class_order.py
+
 ├── class_cashier.py
+
 ├── data.py
+
 ├── database_handler_item.py
+
 ├── database_handler_order.py
+
 ├── database_handler_cashier.py
+
 ├── Items.db
+
 ├── Orders.db
+
 ├── Cashiers.py
+
 ├── program.pyw
+
+├── report_generator.pyw
 
 
 ### File Descriptions
@@ -44,6 +58,7 @@ POS-v7.0/
 - **Orders.db**: Contains Order table that store all Orders.
 - **Cashiers.db**: Contains Cashier table that store all Cashiers.
 - **program.pyw**: GUI implementation for the POS system.
+- **report_generator.pyw**: GUI implementation for Report Generator.
 
 ## Installation
 
@@ -53,7 +68,7 @@ POS-v7.0/
     ```
 2. Navigate to the project directory:
     ```sh
-    cd POS-v7.0
+    cd POS-v8.0
     ```
 3. Install required dependencies:
     ```sh
