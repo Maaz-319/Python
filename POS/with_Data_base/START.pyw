@@ -1,6 +1,7 @@
+# Imports
 import tkinter as tk
 from tkinter import messagebox
-from data import current_cashier
+from data import current_cashier, total_sales
 import database_handler_cashier as db_cashier
 from class_cashier import Cashier
 import os
@@ -10,48 +11,56 @@ bg_color = "#f0f0f0"
 primary_color = "#004d40"
 accent_color = "#00bfa5"
 text_color = "#333333"
-admin_code = 7391
 error_color = "#ff5252"
-cashier_login = db_cashier.get_all_items_name()
-new_cashier = None
+admin_code = 7391
+cashier_login = db_cashier.get_all_items_name()  # list of registered Cashiers
+new_cashier = None  # variable for cashier object
 
 
-# Function to log in
+# ======================================= Functions ======================================================
+
+# -------------------------------------- Function to log in ---------------------------------------------
 def login(_=None):
     username = username_entry.get().lower()
-    password = password_entry.get().lower()
+    password = password_entry.get()
 
-    if username == "" or password == "":
+    # ------------------- Validation for Input Data ----------------------------
+    if username == "" or password == "":  # for empty entries
         messagebox.showerror("Error", "Please enter both username and password")
         return
-    elif username not in cashier_login:
+    elif username not in cashier_login:  # for unregistered cashier
         messagebox.showerror("Error", "Username not found")
         username_entry.delete(0, tk.END)
         password_entry.delete(0, tk.END)
         return
-    elif db_cashier.get_item_by_name(username)[0][2] != password:
+    elif db_cashier.get_item_by_name(username)[2] != password:  # for wrong password
         messagebox.showerror("Error", "Incorrect password")
         password_entry.delete(0, tk.END)
         username_entry.delete(0, tk.END)
         return
+    # ---------------------------------------------------------------------------
 
     current_cashier = username
+    # write current cashier to file
     with open('data.py', 'w') as f:
         f.write(
-            f'current_cashier = "{current_cashier}"\n')
+            f'current_cashier = "{current_cashier}"\ntotal_sales = {total_sales}\n')
         f.close()
     messagebox.showinfo("Success", "Login Successful")
     window.destroy()
-    os.system('program.pyw')
+    os.system('program.pyw')  # run program
 
 
+# --------------------------------- Function for creating Sign Up Window --------------------------
 def create_signup():
+    # ---------------- Initialize window------------
     signup_window = tk.Toplevel()
     signup_window.title("Sign Up")
     signup_window.geometry("250x250")
     signup_window.resizable(False, False)
+    # ----------------------------------------------
 
-    signup_frame = tk.Frame(signup_window, bg=bg_color)
+    signup_frame = tk.Frame(signup_window, bg=bg_color)  # Frame
 
     tk.Label(signup_frame, text="SIGN UP", bg=bg_color, fg=text_color,
              font=("Comic Sans Ms", 15, "bold underline")).pack(
@@ -79,37 +88,47 @@ def create_signup():
     signup_button.pack()
 
 
+# -----------------------------------------------------------------------------------------------------
+
+# ======================================== Function to Sign Up =======================================
 def signup(username, password, admin_pass, window_2):
     global new_cashier
 
     username = username.get().lower()
-    password = password.get().lower()
+    password = password.get()
     admin_pass = admin_pass.get()
 
-    if username == "" or password == "":
+    # ---------- User Input Validation ------------------------------------
+    if username == "" or password == "":  # for empty fields
         messagebox.showerror("Error", "Please enter both username and password")
         return
-    elif username in cashier_login:
+    elif username in cashier_login:  # for already registered cashier
         messagebox.showerror("Error", "Username already exists")
         return
-    elif admin_pass != str(admin_code):
+    elif admin_pass != str(admin_code):  # for authorization of admin
         messagebox.showerror("Error", "Incorrect Admin Code\nPlease contact the administrator")
         return
+    # ----------------------------------------------------------------------
 
-    new_cashier = Cashier(username, password)
-    new_cashier.add_cashier()
+    new_cashier = Cashier(username, password)  # create cashier object
+    new_cashier.add_cashier()  # save cashier to database
 
     current_cashier = None
     with open('data.py', 'w') as f:
         f.write(
-            f'current_cashier = {current_cashier}\n')
+            f'current_cashier = {current_cashier}\ntotal_sales = {total_sales}')
         f.close()
     messagebox.showinfo("Success", "Sign Up Successful\nPlease login to continue")
     window.destroy()
     # window_2.destroy()
 
 
-# Define the Window
+# -----------------------------------------------------------------------------------------------------
+# =======================================================================================================================
+
+
+#  ========================================= Define the Window ==========================================
+# Main window attributes
 window = tk.Tk()
 window.configure()
 window.title("Welcome to POS Login")
@@ -145,3 +164,4 @@ signup_button = tk.Button(login_frame, cursor='hand2', text="Sign Up", bg=accent
 signup_button.pack(pady=10)
 # =================================================
 window.mainloop()
+# ==================================================================================================================

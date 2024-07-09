@@ -13,7 +13,8 @@ def create_table():
         item_name TEXT,
         date_time TEXT,
         cashier_name TEXT,
-        total INTEGER
+        total INTEGER,
+        quantity INTEGER
         )""")
 
 
@@ -21,9 +22,10 @@ def commit_the_changes():
     conn.commit()
 
 
-def insert_data(order_no, name, date_time, cashier, total_price):
-    cursor.execute("INSERT INTO orderedItems(orderNo, item_name, date_time, cashier_name, total) VALUES(?,?,?,?,?)",
-                   (order_no, name, date_time, cashier, total_price))
+def insert_data(order_no, name, date_time, cashier, total_price, quantity):
+    cursor.execute(
+        "INSERT INTO orderedItems(orderNo, item_name, date_time, cashier_name, total, quantity) VALUES(?,?,?,?,?,?)",
+        (order_no, name, date_time, cashier, total_price, quantity))
 
 
 def get_all_items():
@@ -71,6 +73,24 @@ def get_most_min_sold_item(mode):
                 ORDER BY count ASC
                 LIMIT 1
                 """).fetchone()
+
+
+def fetch_data_by_date(start_date, end_date):
+    query = '''SELECT item_name, date_time, quantity FROM orderedItems WHERE date_time BETWEEN ? AND ?'''
+    cursor.execute(query, (start_date, end_date))
+
+    records = cursor.fetchall()
+
+    return records
+
+
+def fetch_all_data():
+    query = '''SELECT item_name, date_time, quantity FROM orderedItems'''
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    return records
 
 
 def end_connection():
