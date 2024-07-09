@@ -1,13 +1,14 @@
 import requests
 from tkinter import messagebox
 
+
 def download_files_from_github_folder(repo_owner, repo_name, folder_path, exclude_file):
     api_url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/contents/{folder_path}"
     response = requests.get(api_url)
     files = response.json()
 
     for file in files:
-        if file['name'] == exclude_file:
+        if file['name'] in exclude_file:
             continue
 
         file_url = file['download_url']
@@ -29,7 +30,8 @@ def get_file_content_from_github(url):
 def install_new_version():
     print("\nInstalling new version...\n")
     try:
-        download_files_from_github_folder('maaz-319', 'python', 'POS/With_Data_base(sqlite)', 'check_update.py')
+        download_files_from_github_folder('maaz-319', 'python', 'POS/With_Data_base(sqlite)',
+                                          ['check_update.py', 'Orders.db', "Items.db", "Cashiers.db"])
     except:
         messagebox.showerror("Error", "Check Internet Connection")
     input("Installation completed. POS latest Installed")
