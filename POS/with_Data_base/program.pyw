@@ -27,7 +27,6 @@ save_item_window = None  # window for saving new item
 theme_changed = False  # for managing theme change
 the_item = []  # for storing items added in an order
 order_no = randint(0000, 9999)  # for order number
-total_sales_local = total_sales
 
 
 # ==================================================== Functions ====================================================
@@ -35,9 +34,7 @@ total_sales_local = total_sales
 def authorize():
     if not current_cashier:
         messagebox.showerror("Error", "Please login to continue")
-        root.destroy()
-    else:
-        preload()
+    return
 
 
 # function to save new item
@@ -171,8 +168,13 @@ def modify_item_price(selected_item, modified_price, window):
 
 # function to place order
 def place_order():
-    global total_price, order_no, new_order, new_item, the_item, total_sales_local
-    total_sales_local += total_price
+    global total_price, order_no, new_order, new_item, the_item, total_sales
+
+    total_sales += total_price
+
+    with open("data.py", 'w') as f:
+        f.write(f"current_cashier = '{current_cashier}'\ntotal_sales = {total_sales}\n")
+        f.close()
 
     order_text = ""
 
@@ -201,16 +203,11 @@ def place_order():
     user_choice = messagebox.askquestion("Order Placed!", f"{receipt_text}\n\n\nPrint Receipt?",
                                          icon='info')  # ask user to print receipt
     print_receipt(receipt_text) if user_choice == 'yes' else None  # print receipt if user chooses to print
-    
+
     clear_order()
 
     order_no = randint(0000, 9999)  # generate new order number for next order
     order_no_label.config(text=f"Your Order: {order_no}")  # update order number label
-    the_item = []
-    with open("data.py", 'w') as f:
-        f.write(f"current_cashier = '{current_cashier}'\ntotal_sales = {total_sales_local}\n")
-        f.close()
-
 
 
 # function to print receipt
@@ -299,13 +296,14 @@ def search_item(_=None):
 
 # function to clear order
 def clear_order():
-    global total_price
+    global total_price, the_item
 
     total_price = 0
     price_label.config(text=str(total_price))
     order_text_box_name.delete(0, END)
     order_text_box_price.delete(0, END)
     responsive_price_preview_label.config(text="")
+    the_item = []
 
 
 # function that loads all items in the listbox at program startup
@@ -477,7 +475,7 @@ def buttons_hover_control_focus_out(element):
 
 
 # ====================================================================================================================
-
+authorize()
 # ================ Initialize the root window ===================
 root = Tk()
 root.title("POS | By Maaz")
@@ -673,7 +671,6 @@ file_menu.add_command(label="Exit", command=on_closing)
 root.config(menu=menu_bar)
 # ====================================================================================
 
-authorize()
-# preload()
+preload()
 # Run the main loop
 root.mainloop()

@@ -84,6 +84,15 @@ def fetch_data_by_date(start_date, end_date):
     return records
 
 
+def fetch_all_data():
+    query = '''SELECT item_name, date_time, quantity FROM orderedItems'''
+    cursor.execute(query)
+
+    records = cursor.fetchall()
+
+    return records
+
+
 def end_connection():
     conn.close()
 

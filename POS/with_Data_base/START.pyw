@@ -13,8 +13,9 @@ accent_color = "#00bfa5"
 text_color = "#333333"
 error_color = "#ff5252"
 admin_code = 7391
-cashier_login = db_cashier.get_all_items_name() # list of registered Cashiers
-new_cashier = None # variable for cashier object
+cashier_login = db_cashier.get_all_items_name()  # list of registered Cashiers
+new_cashier = None  # variable for cashier object
+
 
 # ======================================= Functions ======================================================
 
@@ -24,15 +25,15 @@ def login(_=None):
     password = password_entry.get()
 
     # ------------------- Validation for Input Data ----------------------------
-    if username == "" or password == "": # for empty entries
+    if username == "" or password == "":  # for empty entries
         messagebox.showerror("Error", "Please enter both username and password")
         return
-    elif username not in cashier_login: # for unregistered cashier
+    elif username not in cashier_login:  # for unregistered cashier
         messagebox.showerror("Error", "Username not found")
         username_entry.delete(0, tk.END)
         password_entry.delete(0, tk.END)
         return
-    elif db_cashier.get_item_by_name(username)[2] != password: # for wrong password
+    elif db_cashier.get_item_by_name(username)[2] != password:  # for wrong password
         messagebox.showerror("Error", "Incorrect password")
         password_entry.delete(0, tk.END)
         username_entry.delete(0, tk.END)
@@ -47,7 +48,8 @@ def login(_=None):
         f.close()
     messagebox.showinfo("Success", "Login Successful")
     window.destroy()
-    os.system('program.pyw') # run program
+    os.system('program.pyw')  # run program
+
 
 # --------------------------------- Function for creating Sign Up Window --------------------------
 def create_signup():
@@ -58,7 +60,7 @@ def create_signup():
     signup_window.resizable(False, False)
     # ----------------------------------------------
 
-    signup_frame = tk.Frame(signup_window, bg=bg_color) # Frame
+    signup_frame = tk.Frame(signup_window, bg=bg_color)  # Frame
 
     tk.Label(signup_frame, text="SIGN UP", bg=bg_color, fg=text_color,
              font=("Comic Sans Ms", 15, "bold underline")).pack(
@@ -84,6 +86,8 @@ def create_signup():
                               command=lambda: signup(signup_username_entry, signup_password_entry, admin_code_entry,
                                                      signup_window))
     signup_button.pack()
+
+
 # -----------------------------------------------------------------------------------------------------
 
 # ======================================== Function to Sign Up =======================================
@@ -95,19 +99,19 @@ def signup(username, password, admin_pass, window_2):
     admin_pass = admin_pass.get()
 
     # ---------- User Input Validation ------------------------------------
-    if username == "" or password == "": # for empty fields
+    if username == "" or password == "":  # for empty fields
         messagebox.showerror("Error", "Please enter both username and password")
         return
-    elif username in cashier_login: # for already registered cashier
+    elif username in cashier_login:  # for already registered cashier
         messagebox.showerror("Error", "Username already exists")
         return
-    elif admin_pass != str(admin_code): # for authorization of admin
+    elif admin_pass != str(admin_code):  # for authorization of admin
         messagebox.showerror("Error", "Incorrect Admin Code\nPlease contact the administrator")
         return
     # ----------------------------------------------------------------------
 
-    new_cashier = Cashier(username, password) # create cashier object
-    new_cashier.add_cashier() # save cashier to database
+    new_cashier = Cashier(username, password)  # create cashier object
+    new_cashier.add_cashier()  # save cashier to database
 
     current_cashier = None
     with open('data.py', 'w') as f:
@@ -117,6 +121,8 @@ def signup(username, password, admin_pass, window_2):
     messagebox.showinfo("Success", "Sign Up Successful\nPlease login to continue")
     window.destroy()
     # window_2.destroy()
+
+
 # -----------------------------------------------------------------------------------------------------
 # =======================================================================================================================
 

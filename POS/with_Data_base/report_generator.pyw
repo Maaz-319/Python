@@ -59,6 +59,11 @@ class SalesReportApp:
     def generate_report(self):
         start_date = self.start_date_entry.get()
         end_date = self.end_date_entry.get()
+
+        if start_date == "" or end_date == "":
+            self.show_complete_report()
+            return
+
         try:
             datetime.strptime(start_date, "%Y-%m-%d")
             datetime.strptime(end_date, "%Y-%m-%d")
@@ -74,19 +79,39 @@ class SalesReportApp:
             self.report_text.configure(bg=primary_color, fg=error_color, font=("Comic Sans Ms", 20, "bold"))
         else:
             self.report_text.configure(bg="white", fg=text_color, font=("Ariel", 12, "bold"))
-            
-            report = f"\t\t\t\t\t\t\tDate Range: {start_date} -\t {end_date}\n"
 
+            report = f"\t\t\t\t\t\t\tDate Range: {start_date} -\t {end_date}\n"
 
             report += "\nNo.\tItem Name\t\t\t|\t Price\t\t\t|\t Quantity\t\t\t|\tSales\t\t\t|\tDate\n"
             report += "-" * 250
-            report += f"\n   \t         \t\t\t|\t      \t\t\t|\t         \t\t\t|\tTotal Sales: Rs. Error\n|"
+            report += f"\n   \t         \t\t\t|\t      \t\t\t|\t         \t\t\t|\tTotal Sales: Rs. {total_sales}\n"
             report += "   \t         \t\t\t|\t      \t\t\t|\t         \t\t\t|\t     \t\t\t|\t\n"
             report += "   \t         \t\t\t|\t      \t\t\t|\t         \t\t\t|\t     \t\t\t|\t\n"
-            
+
             for record, counter in zip(records, range(1, len(records) + 1)):
                 report += f"{counter}\t{record[0]}\t\t\t|\t{db_item.get_item_by_name(record[0])[1]}\t\t\t|\t{record[2]}\t\t\t|\t{db_item.get_item_by_name(record[0])[1] * record[2]}\t\t\t|\t{record[1]}\n"
 
+        self.report_text.delete(1.0, tk.END)
+        self.report_text.insert(tk.END, report)
+
+    def show_complete_report(self):
+        records = db_order.fetch_all_data()
+        if records == []:
+            report = "\t\t\t\tNo Sale"
+            self.report_text.configure(bg=primary_color, fg=error_color, font=("Comic Sans Ms", 20, "bold"))
+        else:
+            self.report_text.configure(bg="white", fg=text_color, font=("Ariel", 12, "bold"))
+
+            report = "\t\t\t\t\t\t\tComplete Sales Report\n"
+
+            report += "\nNo.\tItem Name\t\t\t|\t Price\t\t\t|\t Quantity\t\t\t|\tSales\t\t\t|\tDate\n"
+            report += "-" * 250
+            report += f"\n   \t         \t\t\t|\t      \t\t\t|\t         \t\t\t|\tTotal Sales: Rs. {total_sales}\n"
+            report += "   \t         \t\t\t|\t      \t\t\t|\t         \t\t\t|\t     \t\t\t|\t\n"
+            report += "   \t         \t\t\t|\t      \t\t\t|\t         \t\t\t|\t     \t\t\t|\t\n"
+
+            for record, counter in zip(records, range(1, len(records) + 1)):
+                report += f"{counter}\t{record[0]}\t\t\t|\t{db_item.get_item_by_name(record[0])[1]}\t\t\t|\t{record[2]}\t\t\t|\t{db_item.get_item_by_name(record[0])[1] * record[2]}\t\t\t|\t{record[1]}\n"
 
         self.report_text.delete(1.0, tk.END)
         self.report_text.insert(tk.END, report)
