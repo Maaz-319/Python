@@ -136,5 +136,5 @@ For any questions or issues, please contact:
 *Sales Report*
 ![image](https://github.com/Maaz-319/Python/assets/83403349/8a50017f-f09f-439b-a09c-54f79071aea0)
 
-*[Preview](https://drive.google.com/file/d/1xuRiCs1ytBF1gjOfgYDgkjLyP-GTCiEC/view?usp=sharing)*
+*[Video Preview](https://drive.google.com/file/d/1xuRiCs1ytBF1gjOfgYDgkjLyP-GTCiEC/view?usp=sharing)*
 ---
