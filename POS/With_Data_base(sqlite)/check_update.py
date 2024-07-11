@@ -18,13 +18,15 @@ def download_files_from_github_folder(repo_owner, repo_name, folder_path, exclud
 
 
 def get_file_content_from_github(url):
-    raw_url = url.replace("github.com", "raw.githubusercontent.com").replace("/blob", "")
-    response = requests.get(raw_url)
-    if response.status_code == 200:
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raises an HTTPError if the response status code is 4XX or 5XX
         return response.text
-        messagebox.showerror("Error", "Error While Installing")
-    else:
-        return None
+    except requests.exceptions.HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')  # Python 3.6
+    except Exception as err:
+        print(f'Other error occurred: {err}')  # Python 3.6
+    return None
 
 
 def install_new_version():
@@ -38,8 +40,9 @@ def install_new_version():
 
 
 # Usage
-url = "https://github.com/Maaz-319/Python/blob/main/POS/With_Data_base(sqlite)/version.py"
+url = "https://raw.githubusercontent.com/Maaz-319/Python/main/POS/With_Data_base(sqlite)/version.py"
 file_content = get_file_content_from_github(url)
+print(file_content)
 if file_content is not None:
     with open("version.py", "r+") as file:
         data = file.read()
