@@ -137,5 +137,5 @@ For any questions or issues, please contact:
 ![image](https://github.com/Maaz-319/Python/assets/83403349/8a50017f-f09f-439b-a09c-54f79071aea0)
 
 *Video Preview*
-![Preview(https://drive.google.com/file/d/1xuRiCs1ytBF1gjOfgYDgkjLyP-GTCiEC/view?usp=sharing)
+![Preview](https://drive.google.com/file/d/1xuRiCs1ytBF1gjOfgYDgkjLyP-GTCiEC/view?usp=sharing)
 ---
