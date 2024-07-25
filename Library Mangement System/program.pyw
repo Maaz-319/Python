@@ -274,8 +274,9 @@ class LibraryManagementSystem(tk.Tk):
         global new_book
         results = db_books.search_book_by_mode(book_selected[0].lower(), 0)
         if results:
-            new_book = Book(book_selected[0], book_selected[1], book_selected[2])
+            new_book = Book(book_selected[0].lower(), book_selected[1].lower(), book_selected[2].lower())
             new_book.delete_book()
+            print(new_book)
             self.clear_tree()
             self.show_all_books()
             messagebox.showinfo("Success", f"Book '{new_book.name}' deleted.")

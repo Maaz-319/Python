@@ -1,2 +1,2 @@
-current_librarian = 'None'
-theme = "vapor"
+current_librarian = None
+theme = "superhero"

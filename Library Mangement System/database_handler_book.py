@@ -63,7 +63,7 @@ def get_all_book_names():
 def get_all_book_authors():
     results = []
     try:
-        result = cur.execute("SELECT book_author FROM Books ORDER BY book_name ASC").fetchall()
+        result = set(cur.execute("SELECT book_author FROM Books ORDER BY book_name ASC").fetchall())
         for r in result:
             results.append(r[0])
         return results
@@ -102,3 +102,8 @@ def commit_changes():
 
 def end_connection():
     connection.close()
+
+
+# print(len(get_all_book_names()), len(get_all_book_genres()), len(get_all_book_authors()))
+# end_connection()
+# input
