@@ -1,1 +1,0 @@
-If the Shortcut Doesn't work, go to GUI folder and open START file
