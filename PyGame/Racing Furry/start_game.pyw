@@ -62,6 +62,8 @@ hard_mode_button.grid(row=3, column=0)
 # --------------------------------------Game Mode--------------------------------------
 
 # =========================================================================================================
+#                               Author: Maaz Bin Asif
+#                              instagram.com/maaz.binasif
 
 
 # --------------------------------------Cars----------------------------------------
@@ -100,7 +102,6 @@ car_preview = Label(frame, image=photo, bg='black')
 car_preview.grid(row=0, column=0, sticky='ew', padx=20, pady=20)
 
 # --------------------------------------Cars----------------------------------------
-
 # --------------------------------------Button-----------------------------------------
 Label(root, text="Press Start to Play", bg='black', fg='white', font=("consolas", 30, "bold underline")).grid(row=10,
                                                                                                               column=1)

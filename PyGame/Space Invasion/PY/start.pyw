@@ -119,6 +119,8 @@ while loop:
 
     # Update Player pos Val
     player_x += player_x_pos_change
+    #                               Author: Maaz Bin Asif
+    #                              instagram.com/maaz.binasif
 
     # Restrict Player x position
     if player_x < 0:

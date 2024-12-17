@@ -111,6 +111,9 @@ def on_closing():
         pygame.mixer.music.unload()
         root.destroy()
 
+#                               Author: Maaz Bin Asif
+#                              instagram.com/maaz.binasif
+
 
 def create_instance(_=None):
     global directory, new_song
@@ -154,7 +157,8 @@ root.protocol("WM_DELETE_WINDOW", on_closing)
 root.bind("<space>", lambda event: resume_song())
 root.bind("<Control-o>", lambda event: load_files())
 root.bind("<p>", lambda event: create_instance())
-
+# Author: Maaz Bin Asif
+# instagram.com/maaz.binasif
 # Apply a modern color scheme and fonts
 font_large = ("Helvetica", 16, "bold")
 font_medium = ("Helvetica", 14, 'italic')

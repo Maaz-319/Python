@@ -97,7 +97,8 @@ def track_bullet_2_collision(x1, x2, y1, y2):
         return True
     else:
         return False
-
+#                               Author: Maaz Bin Asif
+#                              instagram.com/maaz.binasif
 
 def show_player_1_health():
     player_1_health_label = font.render(str(player_1_health), True, (200, 0, 0))

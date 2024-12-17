@@ -94,6 +94,10 @@ def collision(x1, x2, y1, y2):
         return False
 
 
+#                               Author: Maaz Bin Asif
+#                              instagram.com/maaz.binasif
+
+
 def show_points():
     points_label = font.render(str(int(points_counter)), True, (0, 255, 0))
     screen.blit(points_label, (10, 10))

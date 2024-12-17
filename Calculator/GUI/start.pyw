@@ -107,7 +107,9 @@ def handle_keypress(event):
     elif event.keysym == 'slash':
         command_divide()
     elif event.keysym == 'period':
-        command_point()  
+        command_point()
+    elif event.keysym == 'Delete':
+        command_delete_2()
     
     
 
@@ -182,6 +184,7 @@ root.bind("<minus>", handle_keypress)
 root.bind("<asterisk>", handle_keypress)
 root.bind("<slash>", handle_keypress)
 root.bind("<period>", handle_keypress)
+root.bind("<Delete>", handle_keypress)
 
 
 
